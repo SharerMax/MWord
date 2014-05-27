@@ -1,0 +1,20 @@
+#root dir
+
+#Workspace Config information
+.metadata
+
+#build files
+*.apk
+*.dex
+*.ap_
+dexedLibs
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+project.properties
+.settings/
+.classpath
+.project
