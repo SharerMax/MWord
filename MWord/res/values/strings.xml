@@ -4,5 +4,7 @@
     <string name="app_name">MWord</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="switching_translate">translate</string>
+    <string name="switching_mword">remember</string>
+    <string name="setting_remember">Remember Setting</string>
 </resources>
