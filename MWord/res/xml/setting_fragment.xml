@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="@string/setting_remember"
+        android:key="rememberSetting">
+        <net.sharermax.mword.SettingDialogPreference
+            android:key="test"
+            android:title="Test"
+            android:summary="@string/set_remember_front_size"
+            android:defaultValue="20"
+            android:dialogTitle="Front Size"
+            android:dialogMessage="test test test"
+            android:positiveButtonText="Clear Quests"
+            android:negativeButtonText="Cancel"/>
+        <CheckBoxPreference 
+            android:key="test2"
+            android:title="Test2"
+            android:summaryOn="Test2 ON"
+            android:summaryOff="Test2 OFF"
+            android:defaultValue="flase"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/setting_translate"
+        android:key="translateSetting">
+        <CheckBoxPreference 
+            android:key="test"
+            android:title="Test"
+            android:summaryOn="Test ON"
+            android:summaryOff="Test OFF"
+            android:defaultValue="flase"/>
+        <CheckBoxPreference 
+            android:key="test2"
+            android:title="Test2"
+            android:summaryOn="Test2 ON"
+            android:summaryOff="Test2 OFF"
+            android:defaultValue="flase"/>
+    </PreferenceCategory>
+</PreferenceScreen>

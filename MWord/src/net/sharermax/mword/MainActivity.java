@@ -17,9 +17,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		rememberFragment = new RememberFragment();
 		searchFragment = new TranslateFragment();
-		
+	
 		fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
 		currentFragment = true;
