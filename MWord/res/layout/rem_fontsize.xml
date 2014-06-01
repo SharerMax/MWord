@@ -13,8 +13,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center_horizontal"
-	        android:text="test"
-	        android:textSize="10dp"/>
+	        android:text="test"/>
     </LinearLayout>
 
     <LinearLayout 
@@ -30,7 +29,7 @@
 	        android:id="@+id/rem_frontsize_Bar"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:max="9"
-	        android:progress="5"/>
+	        android:max="4"
+	        android:progress="2"/>
     </LinearLayout>
 </LinearLayout>

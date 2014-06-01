@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -15,11 +18,11 @@ public class MainActivity extends Activity {
 	private TranslateFragment searchFragment;
 	private FragmentManager fragmentManager;
 	private boolean currentFragment;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		rememberFragment = new RememberFragment();
 		searchFragment = new TranslateFragment();
 	
@@ -33,7 +36,7 @@ public class MainActivity extends Activity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		
 	}
 
 

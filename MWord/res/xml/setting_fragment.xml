@@ -3,11 +3,10 @@
     <PreferenceCategory 
         android:title="@string/setting_remember"
         android:key="rememberSetting">
-        <net.sharermax.mword.SettingDialogPreference
-            android:key="rem_font_size"
+        <net.sharermax.mword.RemFontSizeDialogPreference
+            android:key="rem_font_size_key"
             android:title="Font Size"
             android:summary="@string/set_remember_font_size"
-            android:defaultValue="5"
             android:dialogTitle="Font Size"
             android:dialogLayout="@layout/rem_fontsize"
             android:positiveButtonText="OK"
