@@ -1,14 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/action_settings"/>
     <item 
         android:id="@+id/action_switching"
-        android:orderInCategory="99"
+        android:orderInCategory="0"
         android:showAsAction="always"
-        android:title="@string/switching_mword"/>
-
+        android:title="@string/switching_translate"/>
+    <item 
+        android:id="@+id/action_import"
+        android:orderInCategory="50"
+        android:showAsAction="never"
+        android:title="@string/action_import"/>
+    <item 
+        android:id="@+id/action_export"
+        android:orderInCategory="51"
+        android:showAsAction="never"
+        android:title="@string/action_export"/>
+    
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="52"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>   
 </menu>

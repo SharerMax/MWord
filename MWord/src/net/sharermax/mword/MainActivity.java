@@ -3,7 +3,9 @@ package net.sharermax.mword;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,6 +27,15 @@ public class MainActivity extends Activity {
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
 		currentFragment = true;
 	}
+	
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,10 +50,14 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_switching:
 			if(currentFragment) {
-				fragmentManager.beginTransaction().replace(R.id.content, searchFragment).commit();
+				//switch to Translate Fragment
+ 				fragmentManager.beginTransaction().replace(R.id.content, searchFragment).commit();
+ 				item.setTitle(getString(R.string.switching_remember));
 				
 			}else {
+				//switch to Remember Fragment
 				fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
+				item.setTitle(getString(R.string.switching_translate));
 			}
 			currentFragment = !currentFragment;
 			return true;
