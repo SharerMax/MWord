@@ -4,13 +4,13 @@
         android:title="@string/setting_remember"
         android:key="rememberSetting">
         <net.sharermax.mword.SettingDialogPreference
-            android:key="test"
-            android:title="Test"
-            android:summary="@string/set_remember_front_size"
-            android:defaultValue="20"
-            android:dialogTitle="Front Size"
-            android:dialogMessage="test test test"
-            android:positiveButtonText="Clear Quests"
+            android:key="rem_font_size"
+            android:title="Font Size"
+            android:summary="@string/set_remember_font_size"
+            android:defaultValue="5"
+            android:dialogTitle="Font Size"
+            android:dialogLayout="@layout/rem_fontsize"
+            android:positiveButtonText="OK"
             android:negativeButtonText="Cancel"/>
         <CheckBoxPreference 
             android:key="test2"

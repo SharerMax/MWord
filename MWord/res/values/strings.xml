@@ -7,6 +7,6 @@
     <string name="switching_mword">remember</string>
     <string name="setting_remember">Remember Setting</string>
     <string name="setting_translate">Translate Setting</string>
-    <string name="set_remember_front_size">Set remember fron size</string>
-    <string name="front_size">Front Size</string>
+    <string name="set_remember_font_size">Set remember font size</string>
+    <string name="font_size">Font Size</string>
 </resources>
