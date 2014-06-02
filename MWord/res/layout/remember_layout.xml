@@ -4,17 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#e5e5e5" >
+
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_margin="10dp" 
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical" 
         android:background="#ffffff">
 	    <TextView
 	        android:id="@+id/rem_word_show"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_vertical"
 	        android:gravity="center_horizontal"
 	        android:text="test"
 	        android:textSize="50sp"/>        
@@ -29,4 +31,6 @@
         android:layout_marginRight="10dp"
         android:background="#ffffff"
         android:text="测试"/>
+
+
 </LinearLayout>
