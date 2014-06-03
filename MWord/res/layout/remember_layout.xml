@@ -31,6 +31,34 @@
         android:layout_marginRight="10dp"
         android:background="#ffffff"
         android:text="测试"/>
+    <RelativeLayout
+        android:id="@+id/bottom_view" 
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
+	    <ImageView 
+	        android:id="@+id/noseen_viewbutton"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:src="@drawable/no_seen"
+	        android:layout_alignParentLeft="true"/>
+	    <ImageView 
+	        android:id="@+id/remember_viewbutton"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:src="@drawable/no_remember"
+	        android:layout_centerInParent="true"/>
+	    
+	    <ImageView 
+	        android:id="@+id/remember_viewbutton"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:src="@drawable/remember"
+	        android:layout_alignParentRight="true"/>"
+        
+    </RelativeLayout>
 
 
 </LinearLayout>
