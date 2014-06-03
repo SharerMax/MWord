@@ -22,28 +22,42 @@
 	        android:textSize="50sp"/>        
     </LinearLayout>
 
-    <TextView 
-        android:id="@+id/rem_des_show"
+    <RelativeLayout 
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1">
+        <TextView 
+        android:id="@+id/rem_des_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#ffffff"
-        android:text="测试"/>
+        android:background="#ffffff"/>
+        <ImageView 
+            android:id="@+id/rem_query_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/query"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/bottom_view" 
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp">
-	    <ImageView 
+        android:layout_marginBottom="10dp"
+        android:background="#FFFFFF">
+
+	    <ImageView
 	        android:id="@+id/noseen_viewbutton"
 	        android:layout_width="40dp"
 	        android:layout_height="40dp"
-	        android:src="@drawable/no_seen"
-	        android:layout_alignParentLeft="true"/>
+	        android:layout_alignParentLeft="true"
+	        android:scaleType="centerCrop"
+	        android:src="@drawable/no_seen" />
+
 	    <ImageView 
 	        android:id="@+id/remember_viewbutton"
 	        android:layout_width="40dp"
