@@ -52,7 +52,7 @@ public class RememberFragment extends Fragment {
 		rew_des_show.setLongClickable(true);
 		
 		MyGestureDetector myGestureDetector = new MyGestureDetector();
-		gestureDetector = new GestureDetector(getActivity(),myGestureDetector);
+		gestureDetector = new GestureDetector(getActivity(), myGestureDetector);
 		
 		rew_des_show.setOnTouchListener(new OnTouchListener() {
 			
@@ -84,10 +84,19 @@ public class RememberFragment extends Fragment {
 		}
 
 		@Override
-		public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-				float arg3) {
+		public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX,
+				float velocityY) {
 			// TODO Auto-generated method stub
-			return false;
+			if ((event1.getX() - event2.getX() > 100) && (velocityX > 100)) {
+				Log.v("touchevent", "to left");
+			} else if ((event2.getX() - event1.getX() > 100) && (velocityX > 100)){
+				Log.v("touchevent", "to right");
+			} else if ((event1.getY() - event2.getY() > 100) && (velocityY > 100)) {
+				Log.v("touchevent", "to up");
+			} else if((event2.getY() - event1.getY() > 100) && (velocityY > 100)) {
+				Log.v("touchevent", "to down");
+			}
+			return true;
 		}
 
 		@Override
