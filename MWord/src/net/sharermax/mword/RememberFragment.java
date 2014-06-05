@@ -89,6 +89,8 @@ public class RememberFragment extends Fragment {
 			// TODO Auto-generated method stub
 			if ((event1.getX() - event2.getX() > 100) && (velocityX > 100)) {
 				Log.v("touchevent", "to left");
+				rem_query_image.setEnabled(true);
+				rem_query_image.setVisibility(View.VISIBLE);
 			} else if ((event2.getX() - event1.getX() > 100) && (velocityX > 100)){
 				Log.v("touchevent", "to right");
 			} else if ((event1.getY() - event2.getY() > 100) && (velocityY > 100)) {

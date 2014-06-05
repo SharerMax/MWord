@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory 
-        android:title="@string/setting_remember"
-        android:key="rememberSetting">
+        android:title="@string/setting_font_remember"
+        android:key="remFontSetting">
         <net.sharermax.mword.RemFontSizeDialogPreference
             android:key="rem_font_size_key"
             android:title="Font Size"
@@ -11,12 +11,45 @@
             android:dialogLayout="@layout/rem_fontsize"
             android:positiveButtonText="OK"
             android:negativeButtonText="Cancel"/>
-        <CheckBoxPreference 
-            android:key="test2"
-            android:title="Test2"
-            android:summaryOn="Test2 ON"
-            android:summaryOff="Test2 OFF"
+        <net.sharermax.mword.RemFontColorDialogPreference 
+            android:key="rem_font_color"
+            android:title="Font Color"
+            android:dialogTitle="Font Color"
+            android:dialogMessage="Waitting...."
+            android:summary="@string/set_remember_font_color"
             android:defaultValue="flase"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/setting_gesture_custom"
+        android:key="remCustomGesture">
+        <ListPreference 
+            android:key="gestureToRight"
+            android:title="@string/gesture_toright"
+            android:dialogTitle="@string/gesture_custom_dilogtitle"
+            android:entries="@array/customgesture_entry"
+            android:entryValues="@array/customgesture_entryValues"
+            android:defaultValue="0"/>
+        <ListPreference 
+            android:key="gestureToLeft"
+            android:title="@string/gesture_toleft"
+            android:dialogTitle="@string/gesture_custom_dilogtitle"
+            android:entries="@array/customgesture_entry"
+            android:entryValues="@array/customgesture_entryValues"
+            android:defaultValue="0"/>
+        <ListPreference 
+            android:key="gestureToUp"
+            android:title="@string/gesture_toup"
+            android:dialogTitle="@string/gesture_custom_dilogtitle"
+            android:entries="@array/customgesture_entry"
+            android:entryValues="@array/customgesture_entryValues"
+            android:defaultValue="0"/>
+        <ListPreference 
+            android:key="gestureToDown"
+            android:title="@string/gesture_todown"
+            android:dialogTitle="@string/gesture_custom_dilogtitle"
+            android:entries="@array/customgesture_entry"
+            android:entryValues="@array/customgesture_entryValues"
+            android:defaultValue="0"/>
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/setting_translate"

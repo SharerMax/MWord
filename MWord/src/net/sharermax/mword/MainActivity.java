@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 			return true;
 		case R.id.action_settings:
 			Intent intent = new Intent();
-			intent.setClass(this, SettingActivity.class);
+			intent.setClass(this, SettingPreferenceActivity.class);
 			startActivity(intent);
 			return true;
 		default:

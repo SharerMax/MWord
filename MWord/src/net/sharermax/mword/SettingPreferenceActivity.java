@@ -3,7 +3,7 @@ package net.sharermax.mword;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class SettingActivity extends PreferenceActivity {
+public class SettingPreferenceActivity extends PreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -10,8 +10,19 @@
     <string name="action_import">Import</string>
     <string name="action_export">Export</string>
     <!-- Setting interface -->
-    <string name="setting_remember">Remember Setting</string>
-    <string name="setting_translate">Translate Setting</string>
+    <string name="setting_font_remember">Remember Font Setting</string>
     <string name="set_remember_font_size">Set remember font size</string>
+    <string name="set_remember_font_color">Set remember font color</string>
+    
+    <string name="setting_gesture_custom">Custom Gesture</string>
+    <string name="gesture_toleft">Sliding To The Left</string>
+    <string name="gesture_toright">Sliding To The Right</string>
+    <string name="gesture_toup">Sliding To The Up</string>
+    <string name="gesture_todown">Sliding To The Down</string>
+    <string name="gesture_custom_dilogtitle">Action Selection</string>
+    <string name="setting_translate">Translate Setting</string>
+    
     <string name="font_size">Font Size</string>
+    <!-- TEST -->
+    <string name="next">Next</string>
 </resources>
