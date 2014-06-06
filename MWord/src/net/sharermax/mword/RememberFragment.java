@@ -1,5 +1,6 @@
 package net.sharermax.mword;
 
+import android.R.integer;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,7 +38,9 @@ public class RememberFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onStart();
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		int remFontColor = sharedPreferences.getInt(REM_FONT_COLOR_KEY, 0xff000000);
+		String remFontColorString = sharedPreferences.getString(REM_FONT_COLOR_KEY, "000000");
+//		int remFontColor = sharedPreferences.getInt(REM_FONT_COLOR_KEY, Integer.parseInt("0xff000000", 16));
+		int remFontColor = Integer.parseInt(remFontColorString, 16) | 0xff000000;
 		int remFontSize = sharedPreferences.getInt(REM_FONT_SIZE_KEY, 2);
 		rem_word_show.setTextColor(remFontColor);
 		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="customgesture_entry">
-        <item >Null</item>
-        <item >Previous</item>
-        <item >@string/next</item>
-        <item >new</item>
-        <item >delete</item>
+        <item >@string/null_action</item>
+        <item >@string/previous_action</item>
+        <item >@string/next_action</item>
+        <item >@string/new_action</item>
+        <item >@string/delete_action</item>
     </string-array>
     <string-array name="customgesture_entryValues">
         <item >0</item>

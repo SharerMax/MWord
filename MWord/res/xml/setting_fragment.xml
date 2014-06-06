@@ -5,17 +5,18 @@
         android:key="remFontSetting">
         <net.sharermax.mword.RemFontSizeDialogPreference
             android:key="rem_font_size_key"
-            android:title="Font Size"
+            android:title="@string/font_size"
             android:summary="@string/set_remember_font_size"
-            android:dialogTitle="Font Size"
+            android:dialogTitle="@string/font_size"
             android:dialogLayout="@layout/rem_fontsize"
             android:positiveButtonText="OK"
             android:negativeButtonText="Cancel"/>
-        <net.sharermax.mword.RemFontColorDialogPreference 
-            android:key="rem_font_color"
-            android:title="Font Color"
-            android:dialogTitle="Font Color"
-            android:dialogMessage="Waitting...."
+        <ListPreference
+            android:key="rem_font_color_key"
+            android:title="@string/font_color"
+            android:dialogTitle="@string/font_color"
+            android:entries="@array/rem_fontcolor_entry"
+            android:entryValues="@array/rem_fontcolor_entryvalue"
             android:summary="@string/set_remember_font_color"
             android:defaultValue="flase"/>
     </PreferenceCategory>

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -25,13 +26,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		rememberFragment = new RememberFragment();
 		searchFragment = new TranslateFragment();
+		
 	
 		fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
 		currentFragment = true;
 	}
 	
-
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
