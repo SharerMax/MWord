@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) { 
 			if((System.currentTimeMillis()-exitTime) > 2000) { 
-				Toast.makeText(getApplicationContext(), "ÔÙ°´Ò»´ÎÍË³ö³ÌĞò", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "2ç§’å†…å†æ¬¡ç‚¹å‡»è¿”å›é€€å‡ºåº”ç”¨", Toast.LENGTH_SHORT).show();
 				exitTime = System.currentTimeMillis(); 
 			} else { 
 				finish(); 

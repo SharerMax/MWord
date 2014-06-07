@@ -55,7 +55,7 @@ public class RememberFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		new NoWordDialogFragment().show(getFragmentManager(), null);
+		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "000000");
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "2");
@@ -70,7 +70,13 @@ public class RememberFragment extends Fragment {
 		toDownAction = Integer.parseInt(toDownActionString);
 		rem_word_show.setTextColor(remFontColor);
 		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);
-		
+//		rem_word_show.setText(words[0].spelling);
+		//æ— å•è¯æç¤º
+		if (words == null) {
+			new NoWordDialogFragment().show(getFragmentManager(), null);
+		} else {
+			rem_word_show.setText(words[0].spelling);
+		}
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -82,11 +88,11 @@ public class RememberFragment extends Fragment {
 		rem_query_image = (ImageView)(getView().findViewById(R.id.rem_query_image));
 		rew_des_show.setLongClickable(true);
 		
-		rem_word_show.setText(words[0].spelling);
+//		rem_word_show.setText(words[0].spelling);
 		MyGestureDetector myGestureDetector = new MyGestureDetector();
 		gestureDetector = new GestureDetector(getActivity(), myGestureDetector);
 		
-		//µ¥´Ê½âÊÍÇø--´¥ÃşÊÂ¼ş¼àÌı
+		//è§£é‡ŠåŒºè§¦æ‘¸äº‹ä»¶ç›‘å¬
 		rew_des_show.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -95,7 +101,7 @@ public class RememberFragment extends Fragment {
 				return gestureDetector.onTouchEvent(event);
 			}
 		});
-		//µ¥´ÊÏÔÊ¾Ç°µÄµ¥»÷¼àÌı
+		//è§£é‡ŠåŒºç­‰å¾…æ˜¾ç¤ºæç¤ºå›¾ å•å‡»ç›‘å¬
 		rem_query_image.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -109,7 +115,7 @@ public class RememberFragment extends Fragment {
 		});
 		
 	}
-	//Gesture ¼àÌı 
+	//Gesture è¯†åˆ« 
 	public class MyGestureDetector  extends SimpleOnGestureListener{
 
 		@Override
@@ -173,7 +179,7 @@ public class RememberFragment extends Fragment {
 			Log.v(TAG, "NULL");
 			Word word = new Word();
 			word.spelling = "Test";
-			word.explanation = "²âÊÔ";
+			word.explanation = "æµ‹è¯•";
 			dbAdapter.insert(word);
 			break;
 		case 1:
@@ -192,6 +198,7 @@ public class RememberFragment extends Fragment {
 			break;
 		}
 	}
+	//æ— å•è¯æç¤ºDialogå®ç°
 	public static class NoWordDialogFragment extends DialogFragment {
 
 		@Override
@@ -206,6 +213,7 @@ public class RememberFragment extends Fragment {
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
 					Log.v("Dialog", ""+arg1);
+					getActivity().finish();
 				}
 			});
 			return builder.create();
