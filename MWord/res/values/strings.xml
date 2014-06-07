@@ -36,4 +36,7 @@
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>
+    <!-- Warning Message -->
+    <string name="note">Note</string>
+    <string name="no_word_message">No found words :(</string>
 </resources>

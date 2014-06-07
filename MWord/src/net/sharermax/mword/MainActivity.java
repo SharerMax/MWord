@@ -3,15 +3,11 @@ package net.sharermax.mword;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -19,6 +15,7 @@ public class MainActivity extends Activity {
 	private TranslateFragment searchFragment;
 	private FragmentManager fragmentManager;
 	private boolean currentFragment;
+	private long exitTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +71,22 @@ public class MainActivity extends Activity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) { 
+			if((System.currentTimeMillis()-exitTime) > 2000) { 
+				Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+				exitTime = System.currentTimeMillis(); 
+			} else { 
+				finish(); 
+				System.exit(0); 
+			} 
+				return true; 
+			} 
+			return super.onKeyDown(keyCode, event); 
 	}
 	
 }

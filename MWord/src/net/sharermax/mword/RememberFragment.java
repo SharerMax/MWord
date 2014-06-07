@@ -1,7 +1,12 @@
 package net.sharermax.mword;
 
-import android.R.integer;
+import net.sharermax.mword.database.DBAdapter;
+import net.sharermax.mword.database.Word;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,7 +33,18 @@ public class RememberFragment extends Fragment {
 	private int toLeftAction;
 	private int toUpAction;
 	private int toDownAction;
+	private DBAdapter dbAdapter;
+	private Word words[];
 	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		dbAdapter = new DBAdapter(getActivity());
+		dbAdapter.open();
+		words = dbAdapter.queryAllData();
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -39,6 +55,7 @@ public class RememberFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
+		new NoWordDialogFragment().show(getFragmentManager(), null);
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "000000");
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "2");
@@ -53,16 +70,19 @@ public class RememberFragment extends Fragment {
 		toDownAction = Integer.parseInt(toDownActionString);
 		rem_word_show.setTextColor(remFontColor);
 		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);
+		
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		
 		rem_word_show = (TextView)(getView().findViewById(R.id.rem_word_show));
 		rew_des_show = (TextView)(getView().findViewById(R.id.rem_des_show));
 		rem_query_image = (ImageView)(getView().findViewById(R.id.rem_query_image));
 		rew_des_show.setLongClickable(true);
 		
+		rem_word_show.setText(words[0].spelling);
 		MyGestureDetector myGestureDetector = new MyGestureDetector();
 		gestureDetector = new GestureDetector(getActivity(), myGestureDetector);
 		
@@ -84,6 +104,7 @@ public class RememberFragment extends Fragment {
 				Log.v("imageview", "OK");
 				rem_query_image.setEnabled(false);
 				rem_query_image.setVisibility(View.GONE);
+				rew_des_show.setText(words[0].explanation);
 			}
 		});
 		
@@ -149,13 +170,17 @@ public class RememberFragment extends Fragment {
 		String TAG = "GestureAction";
 		switch (action) {
 		case 0:
-			Log.v(TAG, "NULL");			
+			Log.v(TAG, "NULL");
+			Word word = new Word();
+			word.spelling = "Test";
+			word.explanation = "≤‚ ‘";
+			dbAdapter.insert(word);
 			break;
 		case 1:
 			Log.v(TAG, "Previous");	
 			break;
 		case 2:
-			Log.v(TAG, "Next");	
+			Log.v(TAG, "Next");
 			break;
 		case 3:
 			Log.v(TAG, "New");	
@@ -166,6 +191,26 @@ public class RememberFragment extends Fragment {
 		default:
 			break;
 		}
+	}
+	public static class NoWordDialogFragment extends DialogFragment {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle(getString(R.string.note));
+			builder.setMessage(getString(R.string.no_word_message));
+			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					Log.v("Dialog", ""+arg1);
+				}
+			});
+			return builder.create();
+		}
+		
 	}
 	
 }
