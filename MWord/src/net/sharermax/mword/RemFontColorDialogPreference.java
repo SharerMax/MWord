@@ -16,6 +16,5 @@ public class RemFontColorDialogPreference extends DialogPreference{
 	protected void onBindDialogView(View view) {
 		// TODO Auto-generated method stub
 		super.onBindDialogView(view);
-	}
-	
+	}	
 }

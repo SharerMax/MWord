@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 public class RemFontSizeDialogPreference extends DialogPreference {
 	
-	private final static String REM_FONT_SIZE_KEY = "rem_font_size_key";
-	private final static String REM_FONT_COLOR_KEY = "rem_font_color_key";
 	private SeekBar fontsizeSeekBar;
 	private TextView previewView;
 	private int rem_front_size;
@@ -38,7 +36,7 @@ public class RemFontSizeDialogPreference extends DialogPreference {
 		previewView = (TextView)(view.findViewById(R.id.rem_frontsize_view));
 		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		rem_front_size = sharedPreferences.getInt(REM_FONT_SIZE_KEY, 2);
+		rem_front_size = sharedPreferences.getInt(PreferenceKey.REM_FONT_SIZE_KEY, 2);
 		previewView.setTextSize(TypedValue.COMPLEX_UNIT_SP, (rem_front_size + 1) * 10);
 		fontsizeSeekBar.setProgress(rem_front_size);
 		

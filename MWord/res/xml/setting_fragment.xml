@@ -24,28 +24,28 @@
         android:title="@string/setting_gesture_custom"
         android:key="remCustomGesture">
         <ListPreference 
-            android:key="gestureToRight"
+            android:key="gestureToRight_key"
             android:title="@string/gesture_toright"
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
             android:defaultValue="0"/>
         <ListPreference 
-            android:key="gestureToLeft"
+            android:key="gestureToLeft_key"
             android:title="@string/gesture_toleft"
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
             android:defaultValue="0"/>
         <ListPreference 
-            android:key="gestureToUp"
+            android:key="gestureToUp_key"
             android:title="@string/gesture_toup"
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
             android:defaultValue="0"/>
         <ListPreference 
-            android:key="gestureToDown"
+            android:key="gestureToDown_key"
             android:title="@string/gesture_todown"
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
