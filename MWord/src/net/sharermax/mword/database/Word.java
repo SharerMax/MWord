@@ -1,5 +1,10 @@
 package net.sharermax.mword.database;
-
+/********************
+ * 数据库元
+ * author: SharerMax
+ * create: 2014.06.04
+ * modify: 2014.06.04
+ */
 
 public class Word {
 	public int _id = 0;

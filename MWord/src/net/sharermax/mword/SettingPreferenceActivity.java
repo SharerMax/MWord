@@ -1,5 +1,10 @@
 package net.sharermax.mword;
-
+/********************
+ * 设置界面 PreferenceActivity 调用SettingFragment 保存设置项
+ * author: SharerMax
+ * create: 2014.05.30
+ * modify: 2014.05.30
+ */
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 

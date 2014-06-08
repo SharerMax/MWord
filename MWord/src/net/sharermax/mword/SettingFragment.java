@@ -1,5 +1,10 @@
 package net.sharermax.mword;
-
+/********************
+ * 设置界面 SettingFragment
+ * author: SharerMax
+ * create: 2014.05.30
+ * modify: 2014.06.06
+ */
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;

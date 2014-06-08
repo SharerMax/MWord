@@ -1,4 +1,10 @@
 package net.sharermax.mword;
+/********************
+ * RememberFragment 记单词主界面
+ * author: SharerMax
+ * create: 2014.05.29
+ * modify: 2014.06.08
+ */
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
@@ -41,14 +47,15 @@ public class RememberFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		dbAdapter = new DBAdapter(getActivity());
-		dbAdapter.open();
-		words = dbAdapter.queryAllData();
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		dbAdapter = new DBAdapter(getActivity());
+		dbAdapter.open();
+		words = dbAdapter.queryAllData();
 		return inflater.inflate(R.layout.remember_layout, container, false);
 	}
 	@Override
@@ -115,6 +122,14 @@ public class RememberFragment extends Fragment {
 		});
 		
 	}
+	
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		dbAdapter.close();
+	}
+
 	//Gesture 识别 
 	public class MyGestureDetector  extends SimpleOnGestureListener{
 
@@ -216,7 +231,10 @@ public class RememberFragment extends Fragment {
 					getActivity().finish();
 				}
 			});
-			return builder.create();
+			Dialog dialog = builder.create();
+			dialog.setCanceledOnTouchOutside(false);
+			
+			return dialog;
 		}
 		
 	}

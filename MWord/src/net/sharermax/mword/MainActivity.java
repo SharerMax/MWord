@@ -1,5 +1,10 @@
 package net.sharermax.mword;
-
+/********************
+ * 主Activity 存在两个Fragment 包括RememberFragment、TranslateFragment 默认显示RememberFragment
+ * author: SharerMax
+ * create: 2014.05.27
+ * modify: 2014.06.07
+ */
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -88,5 +93,6 @@ public class MainActivity extends Activity {
 			} 
 			return super.onKeyDown(keyCode, event); 
 	}
+	
 	
 }

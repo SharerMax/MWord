@@ -1,8 +1,16 @@
 package net.sharermax.mword;
-
+/********************
+ * 在线翻译主界面 TranslateFragment
+ * author: SharerMax
+ * create: 2014.05.29
+ * modify: 2014.06.08
+ */
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import net.sharermax.mword.database.DBAdapter;
+import net.sharermax.mword.database.Word;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -39,7 +47,11 @@ public class TranslateFragment extends Fragment {
 	private NetWorkThread myThread;
 	private RadioGroup translateGroup;
 	private EditText translatInput;
+	private Button addtoremButton;
 	private String translate_word;
+	private DBAdapter dbAdapter;
+	private String translate_dst;
+	private String translate_src;
 	
 	private final static String HOST_URL = "http://openapi.baidu.com/public/2.0/bmt/translate";
 	private final static String CLIENT_ID = "w9fgEYaMcEl5MQ47OYK97RVM";
@@ -50,6 +62,8 @@ public class TranslateFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		dbAdapter = new DBAdapter(getActivity());
+		dbAdapter.open();
 		return inflater.inflate(R.layout.translate_layout, container, false);
 	}
 
@@ -61,8 +75,10 @@ public class TranslateFragment extends Fragment {
 		translate_des = (TextView)(getView().findViewById(R.id.translate_des_show));
 		translateGroup = (RadioGroup)(getView().findViewById(R.id.translate_radiogroup));
 		translatInput = (EditText)(getView().findViewById(R.id.translate_input));
+		addtoremButton = (Button)(getView().findViewById(R.id.addto_rem_button));
 		from = "zh";
 		to = "en";
+		//选择翻译模式
 		translateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -83,7 +99,7 @@ public class TranslateFragment extends Fragment {
 		});
 		
 		
-		myThread = new NetWorkThread();
+		//点击开始查询
 		translateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -95,11 +111,37 @@ public class TranslateFragment extends Fragment {
 					Toast.makeText(getActivity(), "请输入准备查询的词", Toast.LENGTH_LONG).show();
 				} else {
 					handler = new MyHandler();
+					myThread = new NetWorkThread();
 					myThread.start();
 				}
 			}
 		});
+		//添加查询的词到词库
+		addtoremButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Word word = new Word();
+				word.spelling = translate_src;
+				word.explanation = translate_dst;
+				if (dbAdapter.insert(word) == -1) {
+					Toast.makeText(getActivity(), "添加失败", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(getActivity(), "添加成功", Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+		});
 	}
+	
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		dbAdapter.close();
+	}
+
 	class MyHandler extends Handler {
 
 		@Override
@@ -123,8 +165,9 @@ public class TranslateFragment extends Fragment {
 				} else {
 					JSONArray jsonArray = jsonObject.getJSONArray("trans_result");
 					JSONObject resultJsonObject = (JSONObject)jsonArray.opt(0);
-					String dst = resultJsonObject.getString("dst");
-					translate_des.setText(dst);
+					translate_dst = resultJsonObject.getString("dst");
+					translate_src = resultJsonObject.getString("src");
+					translate_des.setText(translate_dst);
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

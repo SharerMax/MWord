@@ -42,6 +42,12 @@
 	            android:layout_height="wrap_content"
 	            android:layout_margin="10dp"
 	            android:text="翻译" />
+	        <Button 
+	            android:id="@+id/addto_rem_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp"
+	            android:text="添加到词库"/>
    		</RadioGroup>
     </LinearLayout>
     <LinearLayout 

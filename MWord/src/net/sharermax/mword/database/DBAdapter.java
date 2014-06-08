@@ -1,4 +1,10 @@
 package net.sharermax.mword.database;
+/********************
+ * 数据库Adapter 
+ * author: SharerMax
+ * create: 2014.06.04
+ * modify: 2014.06.04
+ */
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -50,10 +56,10 @@ public class DBAdapter {
 	}
 	
 	//insert one record into database
-	public long insert(Word wordu) {
+	public long insert(Word word) {
 		ContentValues cValues = new ContentValues();
-		cValues.put(MyBaseColumns.WORD_SPELLING, wordu.spelling);
-		cValues.put(MyBaseColumns.WORD_EXPLANATION, wordu.explanation);
+		cValues.put(MyBaseColumns.WORD_SPELLING, word.spelling);
+		cValues.put(MyBaseColumns.WORD_EXPLANATION, word.explanation);
 		
 		return dbDatabase.insert(MyBaseColumns.TABLE_NAME, null, cValues);
 	}
