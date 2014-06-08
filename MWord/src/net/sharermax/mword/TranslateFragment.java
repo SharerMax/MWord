@@ -1,5 +1,20 @@
 package net.sharermax.mword;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,14 +25,26 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TranslateFragment extends Fragment {
 
 	private Button translateButton;
 	private TextView translate_des;
 	private Handler handler;
-	NetWorkThread myThread;
+	private NetWorkThread myThread;
+	private RadioGroup translateGroup;
+	private EditText translatInput;
+	private String translate_word;
+	
+	private final static String HOST_URL = "http://openapi.baidu.com/public/2.0/bmt/translate";
+	private final static String CLIENT_ID = "w9fgEYaMcEl5MQ47OYK97RVM";
+	private String from;
+	private String to;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,15 +59,44 @@ public class TranslateFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		translateButton = (Button)(getView().findViewById(R.id.translate_button));
 		translate_des = (TextView)(getView().findViewById(R.id.translate_des_show));
-		handler = new MyHandler();
+		translateGroup = (RadioGroup)(getView().findViewById(R.id.translate_radiogroup));
+		translatInput = (EditText)(getView().findViewById(R.id.translate_input));
+		from = "zh";
+		to = "en";
+		translateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup arg0, int arg1) {
+				// TODO Auto-generated method stub
+				switch (arg1) {
+				case R.id.zhtoen_radiobutton:
+					from = "zh";
+					to = "en";
+					break;
+				case R.id.entozh_radiobutton:
+					from = "en";
+					to = "zh";
+				default:
+					break;
+				}
+			}
+		});
+		
+		
+		myThread = new NetWorkThread();
 		translateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Log.v("Translate", "TTTTT");
-				myThread = new NetWorkThread();
-				myThread.start();
+				translate_word = translatInput.getText().toString();
+				if (translate_word.equals("")) {
+					Toast.makeText(getActivity(), "请输入准备查询的词", Toast.LENGTH_LONG).show();
+				} else {
+					handler = new MyHandler();
+					myThread.start();
+				}
 			}
 		});
 	}
@@ -49,7 +105,31 @@ public class TranslateFragment extends Fragment {
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-			Log.v("handler", Thread.currentThread().getName());
+			Log.v("json", (String)msg.obj);
+			try {
+				JSONObject jsonObject = new JSONObject((String)msg.obj);
+				if (jsonObject.optBoolean("error_code")) {
+					switch (Integer.parseInt(jsonObject.getString("error_code"))) {
+					case 52001:
+						Toast.makeText(getActivity(), "TIMEOUT", Toast.LENGTH_LONG).show();
+						break;
+					case 52002:
+						Toast.makeText(getActivity(), "SYSTEM ERROR", Toast.LENGTH_LONG).show();
+					case 52003:
+						Toast.makeText(getActivity(), "UNAUTHORIZED USER", Toast.LENGTH_LONG).show();
+					default:
+						break;
+					}
+				} else {
+					JSONArray jsonArray = jsonObject.getJSONArray("trans_result");
+					JSONObject resultJsonObject = (JSONObject)jsonArray.opt(0);
+					String dst = resultJsonObject.getString("dst");
+					translate_des.setText(dst);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}
@@ -58,9 +138,35 @@ public class TranslateFragment extends Fragment {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			Message msg = handler.obtainMessage();
-			handler.sendMessage(msg);
-			Log.v("WorkThread", "WWWWWW");
+			
+			try {
+				String httpUrl = HOST_URL + "?" +
+						"client_id=" + CLIENT_ID +
+						"&q=" + URLEncoder.encode(translate_word, "UTF-8").toString() +
+						"&from=" + from +
+						"&to=" + to;
+				Log.v("Thread", httpUrl);
+				HttpGet httpGet = new HttpGet(httpUrl);
+				HttpClient httpClient = new DefaultHttpClient();
+				HttpResponse httpResponse = httpClient.execute(httpGet);
+				if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+					String strResult = EntityUtils.toString(httpResponse.getEntity());
+					Message msg = handler.obtainMessage();
+					msg.obj = strResult;
+					handler.sendMessage(msg);
+					Log.v("network", "ok");
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Log.v("WORKTHREAD", Thread.currentThread().getName());
 		}
 		
 	}

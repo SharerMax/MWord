@@ -10,11 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff">
-        <EditText 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="输入要查询的单词^_^"/>
-        <RadioGroup 
+        <EditText
+            android:id="@+id/translate_input"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="输入要查询的单词^_^"/>
+        <RadioGroup
+            android:id="@+id/translate_radiogroup" 
 	        android:orientation="horizontal"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content">
@@ -23,6 +25,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_margin="10dp"
+	            android:checked="true"
 	            android:text="中->英"/>
 	        <RadioButton 
 	            android:id="@+id/entozh_radiobutton"
@@ -30,6 +33,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="10dp"
 	            android:layout_marginBottom="10dp"
+	            android:checked="false"
 	            android:text="英->中"/>
 
 	        <Button
@@ -52,6 +56,7 @@
 	        android:text="解释："/>
         <TextView 
             android:id="@+id/translate_des_show"
+            android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
