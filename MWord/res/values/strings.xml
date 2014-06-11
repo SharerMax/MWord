@@ -2,10 +2,12 @@
 <resources>
     <!-- MWord apps common string -->
     <string name="app_name">MWord</string>
+    <string name="app_exit">Exit</string>
     <!-- MainActivity Action Bar with show-->
+    <string name="action_switch">Switch</string>
     <string name="action_settings">Setting</string>
-    <string name="switching_translate">translate</string>
-    <string name="switching_remember">remember</string>
+    <string name="switching_translate">Translate</string>
+    <string name="switching_remember">Remember</string>
     <!-- MainActivity Action Bar Setting OptionMenu -->
     <string name="action_import">Import</string>
     <string name="action_export">Export</string>

@@ -9,6 +9,7 @@
             android:summary="@string/set_remember_font_size"
             android:dialogTitle="@string/font_size"
             android:dialogLayout="@layout/rem_fontsize"
+            android:defaultValue="2"
             android:positiveButtonText="OK"
             android:negativeButtonText="Cancel"/>
         <ListPreference
@@ -18,7 +19,7 @@
             android:entries="@array/rem_fontcolor_entry"
             android:entryValues="@array/rem_fontcolor_entryvalue"
             android:summary="@string/set_remember_font_color"
-            android:defaultValue="flase"/>
+            android:defaultValue="000000"/>
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/setting_gesture_custom"
@@ -29,14 +30,14 @@
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
-            android:defaultValue="0"/>
+            android:defaultValue="2"/>
         <ListPreference 
             android:key="gestureToLeft_key"
             android:title="@string/gesture_toleft"
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
-            android:defaultValue="0"/>
+            android:defaultValue="1"/>
         <ListPreference 
             android:key="gestureToUp_key"
             android:title="@string/gesture_toup"

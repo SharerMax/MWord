@@ -4,7 +4,7 @@
         android:id="@+id/action_switching"
         android:orderInCategory="0"
         android:showAsAction="always"
-        android:title="@string/switching_translate"/>
+        android:title="@string/action_switch"/>
     <item 
         android:id="@+id/action_import"
         android:orderInCategory="50"

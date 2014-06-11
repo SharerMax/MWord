@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * 设置界面 SettingFragment
  * author: SharerMax
  * create: 2014.05.30
- * modify: 2014.06.06
+ * modify: 2014.06.10
  */
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -18,20 +18,17 @@ public class SettingFragment extends PreferenceFragment {
 	private ListPreference remGestureToUp;
 	private ListPreference remGestureToDown;
 	private ListPreference remFontColor;
-	private final static String TO_RIGHT_KEY = "gestureToRight";
-	private final static String TO_LEFT_KEY = "gestureToLeft";
-	private final static String TO_UP_KEY = "gestureToUp";
-	private final static String TO_DOWN = "gestureToDown";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.setting_fragment);
-		remGestureToRight = (ListPreference)findPreference(TO_RIGHT_KEY);
-		remGestureToLeft = (ListPreference)findPreference(TO_LEFT_KEY);
-		remGestureToUp = (ListPreference)findPreference(TO_UP_KEY);
-		remGestureToDown = (ListPreference)findPreference(TO_DOWN);
-		remFontColor = (ListPreference)findPreference("rem_font_color_key");
+		remGestureToRight = (ListPreference)findPreference(PreferenceKey.GESTURE_TORIGHT_KEY);
+		remGestureToLeft = (ListPreference)findPreference(PreferenceKey.GESTURE_TOLEFT_KEY);
+		remGestureToUp = (ListPreference)findPreference(PreferenceKey.GESTURE_TOUP_KEY);
+		remGestureToDown = (ListPreference)findPreference(PreferenceKey.GESTURE_TODOWN_KEY);
+		remFontColor = (ListPreference)findPreference(PreferenceKey.REM_FONT_COLOR_KEY);
 		
 		remGestureToRight.setSummary(remGestureToRight.getEntry());
 		remGestureToLeft.setSummary(remGestureToLeft.getEntry());

@@ -3,17 +3,20 @@ package net.sharermax.mword;
  * RememberFragment 记单词主界面
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.08
+ * modify: 2014.06.11
  */
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -29,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+@SuppressLint("ValidFragment")
 public class RememberFragment extends Fragment {
 
 	private TextView rem_word_show;
@@ -41,18 +45,27 @@ public class RememberFragment extends Fragment {
 	private int toDownAction;
 	private DBAdapter dbAdapter;
 	private Word words[];
+	private static MainActivity activity;
 	
+	public RememberFragment() {
+		// TODO Auto-generated constructor stub
+	}
 	
+	public RememberFragment(MainActivity activity) {
+		// TODO Auto-generated constructor stub
+		this.activity = activity;
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+		Log.v("Fragment", "oncreate");
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		Log.v("Fragment", "oncreateview");
 		dbAdapter = new DBAdapter(getActivity());
 		dbAdapter.open();
 		words = dbAdapter.queryAllData();
@@ -62,7 +75,7 @@ public class RememberFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		
+		Log.v("Fragment", "onstart");
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "000000");
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "2");
@@ -89,7 +102,7 @@ public class RememberFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		
+		Log.v("Fragment", "onactivitycreate");
 		rem_word_show = (TextView)(getView().findViewById(R.id.rem_word_show));
 		rew_des_show = (TextView)(getView().findViewById(R.id.rem_des_show));
 		rem_query_image = (ImageView)(getView().findViewById(R.id.rem_query_image));
@@ -124,9 +137,24 @@ public class RememberFragment extends Fragment {
 	}
 	
 	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		Log.v("Fragment", "onpause");
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.v("Fragment", "onresume");
+	}
+
+	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+		Log.v("Fragment", "onstop");
 		dbAdapter.close();
 	}
 
@@ -222,7 +250,8 @@ public class RememberFragment extends Fragment {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(getString(R.string.note));
 			builder.setMessage(getString(R.string.no_word_message));
-			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			//positive 按钮的设置 right  exit
+			builder.setPositiveButton(getString(R.string.app_exit), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
@@ -231,12 +260,55 @@ public class RememberFragment extends Fragment {
 					getActivity().finish();
 				}
 			});
+			//Negative 按钮的设置 left switch to translate
+			builder.setNegativeButton(getString(R.string.switching_translate), new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					Log.v("Dialog", ""+arg1);
+					getFragmentManager().beginTransaction().replace(R.id.content, activity.getFragment()).commit();
+					activity.setCurrentFragment(false);
+				}
+			});
+			//NeutralButton 按钮设置 middle
+			builder.setNeutralButton(getString(R.string.action_import), new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					Log.v("Dialog", ""+arg1);
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.setType("*/*");
+					intent.addCategory(Intent.CATEGORY_OPENABLE);
+					//parent Activity start Activity，if I will get callback result need call
+					//onActivityResult(...) method inside parent activity
+					getActivity().startActivityForResult(intent,1);
+				}
+			});
+			
 			Dialog dialog = builder.create();
 			dialog.setCanceledOnTouchOutside(false);
 			
 			return dialog;
-		}
-		
+		}		
 	}
-	
+	//receive result from activity
+	public void onActivityResult(int requestCode, int resultCode,
+			Intent data) {
+		// TODO Auto-generated method stub
+		
+		Log.v("result", ""+requestCode);
+		if (requestCode == 1) {	
+			//click cancel of chooser
+			if (data == null) {
+				Log.v("FileSelect", "null");
+			} else {
+				Uri uri = data.getData();
+				String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
+				Log.v("FileSelect", filename);
+			}
+			
+		}
+	}
 }
