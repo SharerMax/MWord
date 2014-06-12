@@ -3,22 +3,34 @@ package net.sharermax.mword;
  * RememberFragment 记单词主界面
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.11
+ * modify: 2014.06.12
  */
+
+import java.io.File;
+import java.io.FileInputStream;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
+import net.sharermax.mword.xmlparse.XmlAdapter;
+import android.R.xml;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.IntentSender.SendIntentException;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -31,6 +43,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 @SuppressLint("ValidFragment")
 public class RememberFragment extends Fragment {
@@ -305,10 +318,39 @@ public class RememberFragment extends Fragment {
 				Log.v("FileSelect", "null");
 			} else {
 				Uri uri = data.getData();
-				String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
+				final String filename = uri.getPath();
+//				String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
+				final XmlAdapter xmlAdapter = new XmlAdapter();
+				final DBAdapter db = new DBAdapter(getActivity());
+				final Handler handler = new Handler() {
+
+					@Override
+					public void handleMessage(Message msg) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Import Number:" + msg.what, Toast.LENGTH_LONG).show();
+						db.close();
+						getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
+						
+					}
+					
+				};
 				Log.v("FileSelect", filename);
+				new Thread() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						db.open();
+						Message msg = handler.obtainMessage();
+						msg.what = xmlAdapter.xmlImport(db, filename);
+						handler.sendMessage(msg);
+					}
+					
+				}.start();
+				
 			}
 			
 		}
 	}
+		
 }

@@ -3,19 +3,23 @@ package net.sharermax.mword.xmlparse;
  * XML Adapter 
  * author: SharerMax
  * create: 2014.06.08
- * modify: 2014.06.11
+ * modify: 2014.06.12
  */
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+import net.sharermax.mword.R.string;
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.util.Xml;
@@ -75,7 +79,53 @@ public class XmlAdapter {
 		return -1;
 	}
 	
-	public void xmlImport(String path) {
+	public int xmlImport(DBAdapter db, String path) {
+		XmlPullParser xmlPullParser = Xml.newPullParser();
+		File importfile = new File(path);
+		if (!importfile.exists()) {
+			return -1;
+		} else {
+			try {
+				FileInputStream fileInputStream = new FileInputStream(importfile);
+				try {
+					xmlPullParser.setInput(fileInputStream, "UTF-8");
+					try {
+						Word word = new Word();
+						int count = 0;
+						while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
+							String itemname = xmlPullParser.getName();
+							
+							if ( itemname!=null && itemname.equals("item")) {
+								count = xmlPullParser.getAttributeCount();
+								for (int i = 0; i < count; i++) {
+									String attrname = xmlPullParser.getAttributeName(i);
+									String attrvalue = xmlPullParser.getAttributeValue(i);
+									if (attrname != null) {
+										word.spelling = attrname;
+										word.explanation = attrvalue;
+										db.insert(word);
+									}
+								}
+							}
+							
+						}
+						return count;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (XmlPullParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
+		return 0;
 	}
+	
 }

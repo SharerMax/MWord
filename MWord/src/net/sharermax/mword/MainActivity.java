@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * 主Activity 存在两个Fragment 包括RememberFragment、TranslateFragment 默认显示RememberFragment
  * author: SharerMax
  * create: 2014.05.27
- * modify: 2014.06.11
+ * modify: 2014.06.12
  */
 import java.security.PublicKey;
 
@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 	private RememberFragment rememberFragment;
 	private TranslateFragment translateFragment;
 	private FragmentManager fragmentManager;
-	private boolean currentFragment;
+	private boolean currentFragment; //true : RememberFragment false:TranslateFragment
 	private long exitTime;
 	private ProgressDialog progressDialog;
 	private DBAdapter dbAdapter;
@@ -100,16 +100,12 @@ public class MainActivity extends Activity {
 			return true;
 		case R.id.action_import:
 			Log.v("oooooppppptttt", "importaction");
-			AlertDialog.Builder builder = new Builder(this);
-		  	builder.setMessage("确认退出吗？");
-		  	builder.setTitle("提示");
-		  	builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-		  	});
-		  	builder.create().show();
+			Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
+			fileselectintent.setType("*/*");
+			fileselectintent.addCategory(Intent.CATEGORY_OPENABLE);
+			//parent Activity start Activity，if I will get callback result need call
+			//onActivityResult(...) method inside parent activity
+			startActivityForResult(fileselectintent,2);
 			return true;
 		case R.id.action_export:
 			Log.v("oooooppppptttt", "exportaction");
@@ -150,8 +146,54 @@ public class MainActivity extends Activity {
 //		}
 		//send data to fragment
 		Log.v("result", ""+requestCode);
-		if (requestCode == 1) {
+//		if (requestCode == 1) {
+//			rememberFragment.onActivityResult(requestCode, resultCode, data);
+//		}
+		switch (requestCode) {
+		case 1:
 			rememberFragment.onActivityResult(requestCode, resultCode, data);
+			break;
+		case 2:
+			if (currentFragment) {
+				getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment()).commit();
+			} else {
+//				getFragmentManager().beginTransaction().replace(R.id.content, new TranslateFragment()).commit();
+				if (data == null) {
+					Log.v("FileSelect", "null");
+				} else {
+					Uri uri = data.getData();
+					final String filename = uri.getPath();
+//					String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
+					final XmlAdapter xmlAdapter = new XmlAdapter();
+					final DBAdapter db = new DBAdapter(MainActivity.this);
+					final Handler handler = new Handler() {
+
+						@Override
+						public void handleMessage(Message msg) {
+							// TODO Auto-generated method stub
+							Toast.makeText(MainActivity.this, "Import Number:" + msg.what, Toast.LENGTH_LONG).show();
+							db.close();			
+						}
+						
+					};
+					Log.v("FileSelect", filename);
+					new Thread() {
+
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							db.open();
+							Message msg = handler.obtainMessage();
+							msg.what = xmlAdapter.xmlImport(db, filename);
+							handler.sendMessage(msg);
+						}
+						
+					}.start();
+				}
+			}
+			break;
+		default:
+			break;
 		}
 		
 	}
@@ -185,6 +227,7 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			Log.v("handle", "handlemessage " + Thread.currentThread().getName());
+			dbAdapter.close();
 			progressDialog.dismiss();
 			Toast.makeText(MainActivity.this, "Export Number:" + msg.what, Toast.LENGTH_LONG).show();
 			
