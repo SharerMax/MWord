@@ -30,14 +30,14 @@
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
-            android:defaultValue="2"/>
+            android:defaultValue="1"/>
         <ListPreference 
             android:key="gestureToLeft_key"
             android:title="@string/gesture_toleft"
             android:dialogTitle="@string/gesture_custom_dilogtitle"
             android:entries="@array/customgesture_entry"
             android:entryValues="@array/customgesture_entryValues"
-            android:defaultValue="1"/>
+            android:defaultValue="2"/>
         <ListPreference 
             android:key="gestureToUp_key"
             android:title="@string/gesture_toup"
@@ -68,5 +68,8 @@
             android:summaryOn="Test2 ON"
             android:summaryOff="Test2 OFF"
             android:defaultValue="flase"/>
+        <net.sharermax.mword.SettingAbout
+            android:title="About"
+            android:summary="Application Information"/>
     </PreferenceCategory>
 </PreferenceScreen>

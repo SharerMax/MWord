@@ -3,6 +3,8 @@
     <!-- MWord apps common string -->
     <string name="app_name">MWord</string>
     <string name="app_exit">Exit</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
     <!-- MainActivity Action Bar with show-->
     <string name="action_switch">Switch</string>
     <string name="action_settings">Setting</string>

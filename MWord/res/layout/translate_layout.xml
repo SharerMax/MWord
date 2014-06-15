@@ -50,22 +50,39 @@
 	            android:text="添加到词库"/>
    		</RadioGroup>
     </LinearLayout>
-    <LinearLayout 
-        android:orientation="vertical"
+    <RelativeLayout 
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:background="#ffffff">
-        <TextView 
+        <TextView
+            android:id="@+id/des_label" 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:text="解释："/>
         <TextView 
             android:id="@+id/translate_des_show"
+            android:layout_below="@id/des_label"
             android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/translate_bdfy" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bdfy"
+            android:layout_alignParentLeft="@id/translate_des_show"
+            android:layout_alignBottom="@id/translate_des_show"/>
+        <TextView 
+            android:id="@+id/bdfy_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/translate_bdfy"
+            android:layout_alignBottom="@id/translate_bdfy"
+            android:layout_marginLeft="10dp"
+            android:text="Result From Baidu Translate"/>
+    </RelativeLayout >
     
 
 </LinearLayout>

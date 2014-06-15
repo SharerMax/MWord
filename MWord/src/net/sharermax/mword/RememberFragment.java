@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * RememberFragment 记单词主界面
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.12
+ * modify: 2014.06.15
  */
 
 import java.io.File;
@@ -12,9 +12,11 @@ import java.io.FileInputStream;
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 import net.sharermax.mword.xmlparse.XmlAdapter;
+import android.R.anim;
 import android.R.xml;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -58,6 +60,7 @@ public class RememberFragment extends Fragment {
 	private int toDownAction;
 	private DBAdapter dbAdapter;
 	private Word words[];
+	private int wordcount;
 	private static MainActivity activity;
 	
 	public RememberFragment() {
@@ -82,6 +85,8 @@ public class RememberFragment extends Fragment {
 		dbAdapter = new DBAdapter(getActivity());
 		dbAdapter.open();
 		words = dbAdapter.queryAllData();
+		wordcount = 0;
+		Log.v("wordsnumber", "" + wordcount);
 		return inflater.inflate(R.layout.remember_layout, container, false);
 	}
 	@Override
@@ -91,8 +96,8 @@ public class RememberFragment extends Fragment {
 		Log.v("Fragment", "onstart");
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "000000");
-		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "2");
-		String toLeftActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TOLEFT_KEY, "1");
+		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "1");
+		String toLeftActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TOLEFT_KEY, "2");
 		String toUpActionSting = sharedPreferences.getString(PreferenceKey.GESTURE_TOUP_KEY, "0");
 		String toDownActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TODOWN_KEY, "0");
 		int remFontSize = sharedPreferences.getInt(PreferenceKey.REM_FONT_SIZE_KEY, 2);
@@ -143,7 +148,7 @@ public class RememberFragment extends Fragment {
 				Log.v("imageview", "OK");
 				rem_query_image.setEnabled(false);
 				rem_query_image.setVisibility(View.GONE);
-				rew_des_show.setText(words[0].explanation);
+				rew_des_show.setText(words[wordcount].explanation);
 			}
 		});
 		
@@ -186,10 +191,13 @@ public class RememberFragment extends Fragment {
 			// TODO Auto-generated method stub
 			if ((event1.getX() - event2.getX() > 100) && (velocityX > 100)) {
 				Log.v("touchevent", "to left");
+				
 				rem_query_image.setEnabled(true);
 				rem_query_image.setVisibility(View.VISIBLE);
 				gestureAction(toLeftAction);
 			} else if ((event2.getX() - event1.getX() > 100) && (velocityX > 100)){
+				rem_query_image.setEnabled(true);
+				rem_query_image.setVisibility(View.VISIBLE);
 				Log.v("touchevent", "to right");
 				gestureAction(toRightAction);
 			} else if ((event1.getY() - event2.getY() > 100) && (velocityY > 100)) {
@@ -233,22 +241,56 @@ public class RememberFragment extends Fragment {
 		switch (action) {
 		case 0:
 			Log.v(TAG, "NULL");
-			Word word = new Word();
-			word.spelling = "Test";
-			word.explanation = "测试";
-			dbAdapter.insert(word);
 			break;
 		case 1:
-			Log.v(TAG, "Previous");	
+			Log.v(TAG, "Previous");
+			if (wordcount == 0) {
+				Toast.makeText(getActivity(), "Current word is first in Words", Toast.LENGTH_SHORT).show();
+			} else {
+				wordcount--;
+				rem_word_show.setText(words[wordcount].spelling);
+				rew_des_show.setText("");
+			}
 			break;
 		case 2:
 			Log.v(TAG, "Next");
+			if (wordcount == (words.length - 1)) {
+				Toast.makeText(getActivity(), "Currtent word is final word in words", Toast.LENGTH_SHORT).show();
+			} else {
+				wordcount++;
+				rem_word_show.setText(words[wordcount].spelling);
+				rew_des_show.setText("");
+			}
 			break;
 		case 3:
 			Log.v(TAG, "New");	
 			break;
 		case 4:
-			Log.v(TAG, "Delete");	
+			Log.v(TAG, "Delete");
+			AlertDialog.Builder builder = new Builder(getActivity());
+			builder.setTitle("Delete?");
+			builder.setMessage("Are you sure to delete this word?");
+			builder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					Log.v("gestureAction", "delete_ok");
+					dbAdapter.deleteOneData(words[wordcount]._id);
+					Toast.makeText(getActivity(), "Deleted successfully", Toast.LENGTH_SHORT).show();
+					getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
+				}
+			});
+			builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					Log.v("gestureAction", "delete_cancel");
+				}
+			});
+			Dialog dialog = builder.create();
+			dialog.setCanceledOnTouchOutside(false);
+			dialog.show();
 			break;
 		default:
 			break;
