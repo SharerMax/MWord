@@ -2,45 +2,53 @@
 <resources>
     <!-- MWord apps common string -->
     <string name="app_name">MWord</string>
-    <string name="app_exit">Exit</string>
-    <string name="dialog_ok">OK</string>
-    <string name="dialog_cancel">Cancel</string>
+    <string name="app_exit">退出</string>
+    <string name="dialog_ok">确认</string>
+    <string name="dialog_cancel">取消</string>
     <!-- MainActivity Action Bar with show-->
-    <string name="action_switch">Switch</string>
-    <string name="action_settings">Setting</string>
-    <string name="switching_translate">Translate</string>
-    <string name="switching_remember">Remember</string>
+    <string name="action_switch">切换</string>
+    <string name="action_settings">设置</string>
+    <string name="switching_translate">翻译</string>
+    <string name="switching_remember">助手</string>
     <!-- MainActivity Action Bar Setting OptionMenu -->
-    <string name="action_import">Import</string>
-    <string name="action_export">Export</string>
-    <!-- Setting interface -->
-    <string name="setting_font_remember">Remember Font Setting</string>
-    <string name="set_remember_font_size">Set remember font size</string>
-    <string name="set_remember_font_color">Set remember font color</string>
-    <!-- Remember Setting Title -->
-    <string name="font_size">Font Size</string>
-    <string name="font_color">Font Color</string>
-    <!-- Gesture Setting -->
-    <string name="setting_gesture_custom">Custom Gesture</string>
-    <string name="gesture_toleft">Sliding To The Left</string>
-    <string name="gesture_toright">Sliding To The Right</string>
-    <string name="gesture_toup">Sliding To The Up</string>
-    <string name="gesture_todown">Sliding To The Down</string>
-    <string name="gesture_custom_dilogtitle">Action Selection</string>
-    <string name="setting_translate">Translate Setting</string>
+    <string name="action_import">导入单词</string>
+    <string name="action_export">导出单词</string>
     
+    <!-- Remember Setting  -->
+    <string name="font_size">字体大小</string>
+    <string name="font_color">字体颜色</string>
+    <string name="setting_font_remember">助手字体设置</string>
+    <string name="set_remember_font_size">设置字体大小</string>
+    <string name="set_remember_font_color">设置字体颜色</string>
+    
+    <!-- Gesture Setting -->
+    <string name="setting_gesture_custom">自定义手势</string>
+    <string name="gesture_toleft">向左滑动</string>
+    <string name="gesture_toright">向右滑动</string>
+    <string name="gesture_toup">向上滑动</string>
+    <string name="gesture_todown">向下滑动</string>
+    <string name="gesture_custom_dilogtitle">动作选择</string>
+    <!-- Translate Setting -->
+    <string name="setting_translate">翻译设置</string>
+    <string name="translate_API">翻译API</string>
+    <string name="translate_API_select">翻译API选择</string>
+    <string name="translate_API_baidu">百度翻译</string>
+    <string name="translate_result_from_baiadu">翻译结果来自百度翻译</string>
     <!-- Gesture Action -->
-    <string name="null_action">Null</string>
-    <string name="previous_action">Previous</string>
-    <string name="next_action">Next</string>
-    <string name="new_action">New</string>
-    <string name="delete_action">Delete</string>
+    <string name="null_action">无</string>
+    <string name="previous_action">上一个</string>
+    <string name="next_action">下一个</string>
+    <string name="new_action">添加</string>
+    <string name="delete_action">删除</string>
     <!-- Remember Font Color -->
-    <string name="black">Black</string>
-    <string name="red">Red</string>
-    <string name="green">Green</string>
-    <string name="blue">Blue</string>
+    <string name="black">黑色</string>
+    <string name="red">红色</string>
+    <string name="green">绿色</string>
+    <string name="blue">蓝色</string>
     <!-- Warning Message -->
-    <string name="note">Note</string>
-    <string name="no_word_message">No found words :(</string>
+    <string name="note">提示</string>
+    <string name="no_word_message">未找到单词:(</string>
+    <!-- About  -->
+    <string name="app_about">关于</string>
+    <string name="app_about_summary">应用信息</string>
 </resources>

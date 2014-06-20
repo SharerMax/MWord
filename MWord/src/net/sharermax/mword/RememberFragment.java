@@ -95,7 +95,7 @@ public class RememberFragment extends Fragment {
 		super.onStart();
 		Log.v("Fragment", "onstart");
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "000000");
+		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "#000000").substring(1);
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "1");
 		String toLeftActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TOLEFT_KEY, "2");
 		String toUpActionSting = sharedPreferences.getString(PreferenceKey.GESTURE_TOUP_KEY, "0");
@@ -192,12 +192,12 @@ public class RememberFragment extends Fragment {
 			if ((event1.getX() - event2.getX() > 100) && (velocityX > 100)) {
 				Log.v("touchevent", "to left");
 				
-				rem_query_image.setEnabled(true);
-				rem_query_image.setVisibility(View.VISIBLE);
+//				rem_query_image.setEnabled(true);
+//				rem_query_image.setVisibility(View.VISIBLE);
 				gestureAction(toLeftAction);
 			} else if ((event2.getX() - event1.getX() > 100) && (velocityX > 100)){
-				rem_query_image.setEnabled(true);
-				rem_query_image.setVisibility(View.VISIBLE);
+//				rem_query_image.setEnabled(true);
+//				rem_query_image.setVisibility(View.VISIBLE);
 				Log.v("touchevent", "to right");
 				gestureAction(toRightAction);
 			} else if ((event1.getY() - event2.getY() > 100) && (velocityY > 100)) {
@@ -248,6 +248,8 @@ public class RememberFragment extends Fragment {
 				Toast.makeText(getActivity(), "Current word is first in Words", Toast.LENGTH_SHORT).show();
 			} else {
 				wordcount--;
+				rem_query_image.setEnabled(true);
+				rem_query_image.setVisibility(View.VISIBLE);
 				rem_word_show.setText(words[wordcount].spelling);
 				rew_des_show.setText("");
 			}
@@ -258,6 +260,8 @@ public class RememberFragment extends Fragment {
 				Toast.makeText(getActivity(), "Currtent word is final word in words", Toast.LENGTH_SHORT).show();
 			} else {
 				wordcount++;
+				rem_query_image.setEnabled(true);
+				rem_query_image.setVisibility(View.VISIBLE);
 				rem_word_show.setText(words[wordcount].spelling);
 				rew_des_show.setText("");
 			}
@@ -358,6 +362,7 @@ public class RememberFragment extends Fragment {
 			//click cancel of chooser
 			if (data == null) {
 				Log.v("FileSelect", "null");
+				getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
 			} else {
 				Uri uri = data.getData();
 				final String filename = uri.getPath();

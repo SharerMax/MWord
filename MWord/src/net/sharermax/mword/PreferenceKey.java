@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * Prerference Key 
  * author: SharerMax
  * create: 2014.06.07
- * modify: 2014.06.07
+ * modify: 2014.06.16
  */
 public class PreferenceKey {
 	public final static String REM_FONT_SIZE_KEY = "rem_font_size_key";
@@ -13,4 +13,6 @@ public class PreferenceKey {
 	public final static String GESTURE_TOLEFT_KEY = "gestureToLeft_key";
 	public final static String GESTURE_TOUP_KEY = "gestureToUp_key";
 	public final static String GESTURE_TODOWN_KEY = "gestureToDown_key";
+	
+	public final static String TRANSLATE_API_KEY = "translate_api_key";
 }

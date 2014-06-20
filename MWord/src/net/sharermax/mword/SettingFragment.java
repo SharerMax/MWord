@@ -19,6 +19,8 @@ public class SettingFragment extends PreferenceFragment {
 	private ListPreference remGestureToDown;
 	private ListPreference remFontColor;
 	
+	private ListPreference translateApi;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -30,10 +32,14 @@ public class SettingFragment extends PreferenceFragment {
 		remGestureToDown = (ListPreference)findPreference(PreferenceKey.GESTURE_TODOWN_KEY);
 		remFontColor = (ListPreference)findPreference(PreferenceKey.REM_FONT_COLOR_KEY);
 		
+		translateApi = (ListPreference)findPreference(PreferenceKey.TRANSLATE_API_KEY);
+		
 		remGestureToRight.setSummary(remGestureToRight.getEntry());
 		remGestureToLeft.setSummary(remGestureToLeft.getEntry());
 		remGestureToUp.setSummary(remGestureToUp.getEntry());
 		remGestureToDown.setSummary(remGestureToDown.getEntry());
+		
+		translateApi.setSummary(translateApi.getEntry());
 		
 		GesturePreferenceChangelistener myGesturePreferenceChangelistener = new GesturePreferenceChangelistener();
 		remGestureToRight.setOnPreferenceChangeListener(myGesturePreferenceChangelistener);

@@ -7,9 +7,9 @@
         <item >@string/blue</item>
     </string-array>
     <string-array name="rem_fontcolor_entryvalue">
-        <item >000000</item>
-        <item >ff0000</item>
-        <item >008000</item>
-        <item >0000ff</item>
+        <item >#000000</item>
+        <item >#ff0000</item>
+        <item >#008000</item>
+        <item >#0000ff</item>
     </string-array>
 </resources>

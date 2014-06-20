@@ -21,20 +21,20 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content">
 	        <RadioButton 
-	            android:id="@+id/zhtoen_radiobutton"
+	            android:id="@+id/entozh_radiobutton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_margin="10dp"
 	            android:checked="true"
-	            android:text="中->英"/>
+	            android:text="英->中"/>
 	        <RadioButton 
-	            android:id="@+id/entozh_radiobutton"
+	            android:id="@+id/zhtoen_radiobutton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="10dp"
 	            android:layout_marginBottom="10dp"
 	            android:checked="false"
-	            android:text="英->中"/>
+	            android:text="中->英"/>
 
 	        <Button
 	            android:id="@+id/translate_button"
@@ -81,7 +81,7 @@
             android:layout_toRightOf="@id/translate_bdfy"
             android:layout_alignBottom="@id/translate_bdfy"
             android:layout_marginLeft="10dp"
-            android:text="Result From Baidu Translate"/>
+            android:text="@string/translate_result_from_baiadu"/>
     </RelativeLayout >
     
 

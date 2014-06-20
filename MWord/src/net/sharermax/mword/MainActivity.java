@@ -116,7 +116,7 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	//2s内两次点击返回键退出程序
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
@@ -149,14 +149,16 @@ public class MainActivity extends Activity {
 //		if (requestCode == 1) {
 //			rememberFragment.onActivityResult(requestCode, resultCode, data);
 //		}
+		// requestcode = 1 来着RememberFragment的文件选择
+		// requestcode = 2 来着ActionBar的文件选择
 		switch (requestCode) {
 		case 1:
 			rememberFragment.onActivityResult(requestCode, resultCode, data);
 			break;
 		case 2:
-			if (currentFragment) {
-				getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment()).commit();
-			} else {
+//			if (currentFragment) {
+//				getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment()).commit();
+//			} else {
 //				getFragmentManager().beginTransaction().replace(R.id.content, new TranslateFragment()).commit();
 				if (data == null) {
 					Log.v("FileSelect", "null");
@@ -189,7 +191,7 @@ public class MainActivity extends Activity {
 						}
 						
 					}.start();
-				}
+//				}
 			}
 			break;
 		default:

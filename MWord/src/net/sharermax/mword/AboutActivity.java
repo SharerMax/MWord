@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * 关于Activity 
  * author: SharerMax
  * create: 2014.06.15
- * modify: 2014.06.15
+ * modify: 2014.06.16
  */
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,23 +50,29 @@ public class AboutActivity extends Activity {
 				case 0:
 					Log.v("listview", "0");
 					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setData(Uri.parse("http://git.oschina.net"));
+					intent.setData(Uri.parse("http://sharermax.net/%E5%85%B3%E4%BA%8E%E6%88%91/"));
 					startActivity(intent);
 					break;
 				case 1:
 					Log.v("listview", "1");
+					Intent intent1 = new Intent(Intent.ACTION_VIEW);
+					intent1.setData(Uri.parse("http://git.oschina.net/watermelon/MWord"));
+					startActivity(intent1);
 					break;
 				case 2:
 					Log.v("listview", "2");
+					Intent intent2 = new Intent(Intent.ACTION_VIEW);
+					intent2.setData(Uri.parse("http://git.oschina.net/watermelon/MWord/raw/master/LICENSE"));
+					startActivity(intent2);
 					break;
 				case 3:
 					Log.v("listview", "3");
 					break;
 				case 4:
 					Log.v("listview", "4");
-					Intent intent2 = new Intent(Intent.ACTION_SENDTO);
-					intent2.setData(Uri.parse("mailto:mdcw1103@gmail.com"));
-					startActivity(intent2);
+					Intent intent4 = new Intent(Intent.ACTION_SENDTO);
+					intent4.setData(Uri.parse("mailto:mdcw1103@gmail.com"));
+					startActivity(Intent.createChooser(intent4, "请选择邮件类应用")); 
 					break;
 				default:
 					break;

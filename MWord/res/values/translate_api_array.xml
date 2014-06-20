@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="translate_api_entry">
+        <item >@string/translate_API_baidu</item>
+    </string-array>
+    <string-array name="translate_api_entryValue">
+        <item >baidu</item>
+    </string-array>
+</resources>

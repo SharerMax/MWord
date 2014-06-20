@@ -8,16 +8,21 @@ package net.sharermax.mword;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.jar.JarException;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 
+import org.apache.http.HttpConnection;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParamBean;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,14 +81,21 @@ public class TranslateFragment extends Fragment {
 		translateGroup = (RadioGroup)(getView().findViewById(R.id.translate_radiogroup));
 		translatInput = (EditText)(getView().findViewById(R.id.translate_input));
 		addtoremButton = (Button)(getView().findViewById(R.id.addto_rem_button));
-		from = "zh";
-		to = "en";
+		from = "en";
+		to = "zh";
+		translate_src = "";
+		translate_dst = "";
 		//选择翻译模式
 		translateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
 			
 			@Override
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
 				// TODO Auto-generated method stub
+				translate_des.setText("");
+				translatInput.setText("");
+				translate_src = "";
+				translate_dst = "";
 				switch (arg1) {
 				case R.id.zhtoen_radiobutton:
 					from = "zh";
@@ -122,11 +134,23 @@ public class TranslateFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				if (translate_src.equals("") || translate_dst.equals("")) {
+					Toast.makeText(getActivity(), "添加的单词为空", Toast.LENGTH_SHORT).show();
+					return;
+				} else {
+					
+				}
 				Word word = new Word();
-				word.spelling = translate_src;
-				word.explanation = translate_dst;
+				if (from.equals("en")) {
+					word.spelling = translate_src;
+					word.explanation = translate_dst;
+				} else {
+					word.spelling = translate_dst;
+					word.explanation = translate_src;
+				}
+				
 				if (dbAdapter.insert(word) == -1) {
-					Toast.makeText(getActivity(), "添加失败", Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), "添加失败", Toast.LENGTH_SHORT).show();
 				} else {
 					Toast.makeText(getActivity(), "添加成功", Toast.LENGTH_SHORT).show();
 				}
@@ -142,6 +166,7 @@ public class TranslateFragment extends Fragment {
 		dbAdapter.close();
 	}
 
+	//请求数据，并对Json数据进行解析
 	class MyHandler extends Handler {
 
 		@Override
@@ -190,7 +215,12 @@ public class TranslateFragment extends Fragment {
 						"&to=" + to;
 				Log.v("Thread", httpUrl);
 				HttpGet httpGet = new HttpGet(httpUrl);
-				HttpClient httpClient = new DefaultHttpClient();
+				BasicHttpParams params = new BasicHttpParams();
+				//连接超时2s
+				HttpConnectionParams.setConnectionTimeout(params, 2000);
+				//请求超时2s
+				HttpConnectionParams.setSoTimeout(params, 2000);
+				HttpClient httpClient = new DefaultHttpClient(params);
 				HttpResponse httpResponse = httpClient.execute(httpGet);
 				if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 					String strResult = EntityUtils.toString(httpResponse.getEntity());
@@ -198,10 +228,18 @@ public class TranslateFragment extends Fragment {
 					msg.obj = strResult;
 					handler.sendMessage(msg);
 					Log.v("network", "ok");
+				} else {
+					
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-			} catch (ClientProtocolException e) {
+			} catch (java.net.ConnectException e) {
+				// TODO: handle exception
+				Toast.makeText(getActivity(), "连接超时", Toast.LENGTH_LONG).show();
+			} catch (java.net.SocketTimeoutException e) {
+				// TODO: handle exception
+				Toast.makeText(getActivity(), "请求超时", Toast.LENGTH_LONG).show();
+			}catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
