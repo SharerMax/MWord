@@ -3,27 +3,18 @@ package net.sharermax.mword;
  * 主Activity 存在两个Fragment 包括RememberFragment、TranslateFragment 默认显示RememberFragment
  * author: SharerMax
  * create: 2014.05.27
- * modify: 2014.06.12
+ * modify: 2014.06.22
  */
-import java.security.PublicKey;
-
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
-
-import android.R.integer;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -48,17 +39,27 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		rememberFragment = new RememberFragment(this);
+		rememberFragment = new RememberFragment();
 		translateFragment = new TranslateFragment();
 		
 		fragmentManager = getFragmentManager();
+//		FragmentTransaction transaction = fragmentManager.beginTransaction().setCustomAnimations(
+//				android.R.anim.fade_in, android.R.anim.fade_out);
+		
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
+//		transaction.add(R.id.content, rememberFragment);
+//		transaction.add(R.id.content, translateFragment).commit();
+//		transaction.hide(translateFragment).show(rememberFragment);
+//		transaction.commit();
 		currentFragment = true;
 		
 	}
 	
-	public TranslateFragment getFragment() {
+	public TranslateFragment getTranslateFragment() {
 		return translateFragment;
+	}
+	public RememberFragment getRememberFragment() {
+		return rememberFragment;
 	}
 	public void setCurrentFragment(boolean flag) {
 		this.currentFragment = flag;
@@ -71,6 +72,7 @@ public class MainActivity extends Activity {
 	}
 
 
+	//Option Menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -99,7 +101,7 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_import:
-			Log.v("oooooppppptttt", "importaction");
+//			Log.v("oooooppppptttt", "importaction");
 			Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
 			fileselectintent.setType("*/*");
 			fileselectintent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -108,7 +110,7 @@ public class MainActivity extends Activity {
 			startActivityForResult(fileselectintent,2);
 			return true;
 		case R.id.action_export:
-			Log.v("oooooppppptttt", "exportaction");
+//			Log.v("oooooppppptttt", "exportaction");
 			CreateExportProgressDialog();
 			return true;
 		default:
@@ -125,8 +127,8 @@ public class MainActivity extends Activity {
 				Toast.makeText(MainActivity.this, "2秒内再次点击返回退出应用", Toast.LENGTH_SHORT).show();
 				exitTime = System.currentTimeMillis(); 
 			} else { 
-				finish(); 
-				System.exit(0); 
+				this.finish();
+//				System.exit(0); 
 			} 
 				return true; 
 			} 
@@ -137,18 +139,6 @@ public class MainActivity extends Activity {
 	public void onActivityResult(int requestCode, int resultCode,
 			Intent data) {
 		// TODO Auto-generated method stub
-		
-//		Log.v("result", ""+requestCode);
-//		if (requestCode == 1) {
-//			Uri uri = data.getData();
-//			String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
-//			Log.v("FileSelect", filename);
-//		}
-		//send data to fragment
-		Log.v("result", ""+requestCode);
-//		if (requestCode == 1) {
-//			rememberFragment.onActivityResult(requestCode, resultCode, data);
-//		}
 		// requestcode = 1 来着RememberFragment的文件选择
 		// requestcode = 2 来着ActionBar的文件选择
 		switch (requestCode) {
@@ -156,42 +146,36 @@ public class MainActivity extends Activity {
 			rememberFragment.onActivityResult(requestCode, resultCode, data);
 			break;
 		case 2:
-//			if (currentFragment) {
-//				getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment()).commit();
-//			} else {
-//				getFragmentManager().beginTransaction().replace(R.id.content, new TranslateFragment()).commit();
-				if (data == null) {
-					Log.v("FileSelect", "null");
-				} else {
-					Uri uri = data.getData();
-					final String filename = uri.getPath();
-//					String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
-					final XmlAdapter xmlAdapter = new XmlAdapter();
-					final DBAdapter db = new DBAdapter(MainActivity.this);
-					final Handler handler = new Handler() {
+			if (data == null) {
+//				Log.v("FileSelect", "null");
+			} else {
+				Uri uri = data.getData();
+				final String filename = uri.getPath();
+				final XmlAdapter xmlAdapter = new XmlAdapter();
+				final DBAdapter db = new DBAdapter(MainActivity.this);
+				final Handler handler = new Handler() {
 
-						@Override
-						public void handleMessage(Message msg) {
-							// TODO Auto-generated method stub
-							Toast.makeText(MainActivity.this, "Import Number:" + msg.what, Toast.LENGTH_LONG).show();
-							db.close();			
-						}
-						
-					};
-					Log.v("FileSelect", filename);
-					new Thread() {
+					@Override
+					public void handleMessage(Message msg) {
+						// TODO Auto-generated method stub
+						Toast.makeText(MainActivity.this, "导入单词数:" + msg.what, Toast.LENGTH_LONG).show();
+						db.close();			
+					}
+					
+				};
+				Log.v("FileSelect", filename);
+				new Thread() {
 
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							db.open();
-							Message msg = handler.obtainMessage();
-							msg.what = xmlAdapter.xmlImport(db, filename);
-							handler.sendMessage(msg);
-						}
-						
-					}.start();
-//				}
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						db.open();
+						Message msg = handler.obtainMessage();
+						msg.what = xmlAdapter.xmlImport(db, filename);
+						handler.sendMessage(msg);
+					}
+					
+				}.start();
 			}
 			break;
 		default:
@@ -199,17 +183,24 @@ public class MainActivity extends Activity {
 		}
 		
 	}
+	//导出进度Dialog
 	private void CreateExportProgressDialog() {
-		progressDialog = ProgressDialog.show(this, "Exportting", null);
+		progressDialog = ProgressDialog.show(this, "导出", null);
 		progressDialog.setCanceledOnTouchOutside(false);
 		dbAdapter = new DBAdapter(MainActivity.this);
 		dbAdapter.open();
-		Log.v("createexport", Thread.currentThread().getName());
-		expotrpath = Environment.getExternalStorageDirectory().getPath() + "/MWord/Backup";
-		xmlAdapter = new XmlAdapter();
-		handler = new MyHandler();
-		Thread thread = new ExpotrThread();
-		thread.start();
+//		Log.v("createexport", Thread.currentThread().getName());
+		//检查SD卡是否存在，并生成导出路径
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			expotrpath = Environment.getExternalStorageDirectory().getPath() + "/MWord/Backup";
+			xmlAdapter = new XmlAdapter();
+			handler = new MyHandler();
+			Thread thread = new ExpotrThread();
+			thread.start();
+		} else {
+			Toast.makeText(MainActivity.this, "SD卡不存在 :( ", Toast.LENGTH_LONG).show();
+		}
+		
 	}
 	
 	class ExpotrThread extends Thread {
@@ -228,10 +219,10 @@ public class MainActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-			Log.v("handle", "handlemessage " + Thread.currentThread().getName());
+//			Log.v("handle", "handlemessage " + Thread.currentThread().getName());
 			dbAdapter.close();
 			progressDialog.dismiss();
-			Toast.makeText(MainActivity.this, "Export Number:" + msg.what, Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, "导出单词数:" + msg.what, Toast.LENGTH_LONG).show();
 			
 		}
 		

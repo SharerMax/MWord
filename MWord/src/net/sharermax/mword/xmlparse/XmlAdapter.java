@@ -3,7 +3,7 @@ package net.sharermax.mword.xmlparse;
  * XML Adapter 
  * author: SharerMax
  * create: 2014.06.08
- * modify: 2014.06.12
+ * modify: 2014.06.22
  */
 
 import java.io.File;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import net.sharermax.mword.R.string;
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 
@@ -90,22 +89,28 @@ public class XmlAdapter {
 				try {
 					xmlPullParser.setInput(fileInputStream, "UTF-8");
 					try {
-						Word word = new Word();
+						
 						int count = 0;
+//						Log.v("xmlimport", "WWWWW");
 						while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
 							String itemname = xmlPullParser.getName();
 							
-							if ( itemname!=null && itemname.equals("item")) {
-								count = xmlPullParser.getAttributeCount();
-								for (int i = 0; i < count; i++) {
-									String attrname = xmlPullParser.getAttributeName(i);
-									String attrvalue = xmlPullParser.getAttributeValue(i);
+							if ( (itemname!=null) && (xmlPullParser.getEventType() == XmlPullParser.START_TAG) ) {
+//								count = xmlPullParser.getAttributeCount();
+//								Log.v("xmlimport", itemname + xmlPullParser.getEventType() );
+								if (itemname.equals("item")) {
+									String attrname = xmlPullParser.getAttributeName(0);
+									String attrvalue = xmlPullParser.getAttributeValue(0);
 									if (attrname != null) {
+										Word word = new Word();
 										word.spelling = attrname;
 										word.explanation = attrvalue;
+//										Log.v("xmlimport", "IIII");
 										db.insert(word);
+										count++;
 									}
 								}
+
 							}
 							
 						}

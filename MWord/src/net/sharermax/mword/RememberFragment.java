@@ -3,40 +3,32 @@ package net.sharermax.mword;
  * RememberFragment 记单词主界面
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.15
+ * modify: 2014.06.22
  */
-
-import java.io.File;
-import java.io.FileInputStream;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 import net.sharermax.mword.xmlparse.XmlAdapter;
-import android.R.anim;
-import android.R.xml;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.IntentSender.SendIntentException;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,42 +50,57 @@ public class RememberFragment extends Fragment {
 	private int toLeftAction;
 	private int toUpAction;
 	private int toDownAction;
-	private DBAdapter dbAdapter;
+	private DBAdapter dbAdapter = null;
 	private Word words[];
-	private int wordcount;
+	private int wordcount = 0;
 	private static MainActivity activity;
 	
 	public RememberFragment() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public RememberFragment(MainActivity activity) {
-		// TODO Auto-generated constructor stub
-		this.activity = activity;
+//	public RememberFragment(MainActivity activity) {
+//		// TODO Auto-generated constructor stub
+//		this.activity = activity;
+//	}
+	//Activity 与 Fragment 建立联系时 call
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		if (activity instanceof MainActivity) {
+			this.activity = (MainActivity)activity;
+//			Log.v("Fragment", "MainActivity");
+		}
 	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		Log.v("Fragment", "oncreate");
+//		dbAdapter = new DBAdapter(getActivity());
+//		if (dbAdapter == null) {
+//			dbAdapter = new DBAdapter(activity);
+//			dbAdapter.open();
+//		}
+//		words = dbAdapter.queryAllData();
+//		Log.v("Fragment", "oncreate");
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Log.v("Fragment", "oncreateview");
-		dbAdapter = new DBAdapter(getActivity());
-		dbAdapter.open();
-		words = dbAdapter.queryAllData();
-		wordcount = 0;
-		Log.v("wordsnumber", "" + wordcount);
+//		Log.v("Fragment", "oncreateview");
+		
+//		Log.v("wordsnumber", "" + wordcount);
 		return inflater.inflate(R.layout.remember_layout, container, false);
 	}
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.v("Fragment", "onstart");
+//		Log.v("Fragment", "onstart");
+
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "#000000").substring(1);
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "1");
@@ -108,6 +115,13 @@ public class RememberFragment extends Fragment {
 		toDownAction = Integer.parseInt(toDownActionString);
 		rem_word_show.setTextColor(remFontColor);
 		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);
+		
+		if (dbAdapter == null) {
+			dbAdapter = new DBAdapter(activity);
+			dbAdapter.open();
+		}
+		words = dbAdapter.queryAllData();
+		
 //		rem_word_show.setText(words[0].spelling);
 		//无单词提示
 		if (words == null) {
@@ -120,7 +134,7 @@ public class RememberFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		Log.v("Fragment", "onactivitycreate");
+//		Log.v("Fragment", "onactivitycreate");
 		rem_word_show = (TextView)(getView().findViewById(R.id.rem_word_show));
 		rew_des_show = (TextView)(getView().findViewById(R.id.rem_des_show));
 		rem_query_image = (ImageView)(getView().findViewById(R.id.rem_query_image));
@@ -145,7 +159,7 @@ public class RememberFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Log.v("imageview", "OK");
+//				Log.v("imageview", "OK");
 				rem_query_image.setEnabled(false);
 				rem_query_image.setVisibility(View.GONE);
 				rew_des_show.setText(words[wordcount].explanation);
@@ -158,23 +172,46 @@ public class RememberFragment extends Fragment {
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Log.v("Fragment", "onpause");
+//		if (dbAdapter == null) {
+//			Log.v("Fragment", "onpause null");
+//		}
+//		Log.v("Fragment", "onpause");
+//		dbAdapter.close();
 	}
 	
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.v("Fragment", "onresume");
+//		Log.v("Fragment", "onresume1");
+		
+//		if (words == null) {
+//			new NoWordDialogFragment().show(getFragmentManager(), null);
+//			Log.v("Fragment", "null");
+//		} else {
+//			rem_word_show.setText(words[0].spelling);
+//			Log.v("Fragment", "spelling" + words.length);
+//		}
+//		Log.v("Fragment", "onresume2");
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Log.v("Fragment", "onstop");
+//		Log.v("Fragment", "onstop");
 		dbAdapter.close();
+		dbAdapter = null;
 	}
+	
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+//		Log.v("fragment", "destory");
+		super.onDestroy();
+	}
+
 
 	//Gesture 识别 
 	public class MyGestureDetector  extends SimpleOnGestureListener{
@@ -189,22 +226,22 @@ public class RememberFragment extends Fragment {
 		public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX,
 				float velocityY) {
 			// TODO Auto-generated method stub
-			if ((event1.getX() - event2.getX() > 100) && (velocityX > 100)) {
-				Log.v("touchevent", "to left");
+			if ((event1.getX() - event2.getX() > 100) && (Math.abs(velocityX) > 150)) {
+//				Log.v("touchevent", "to left");
 				
 //				rem_query_image.setEnabled(true);
 //				rem_query_image.setVisibility(View.VISIBLE);
 				gestureAction(toLeftAction);
-			} else if ((event2.getX() - event1.getX() > 100) && (velocityX > 100)){
+			} else if ((event2.getX() - event1.getX() > 100) && (Math.abs(velocityX) > 150)){
 //				rem_query_image.setEnabled(true);
 //				rem_query_image.setVisibility(View.VISIBLE);
-				Log.v("touchevent", "to right");
+//				Log.v("touchevent", "to right");
 				gestureAction(toRightAction);
-			} else if ((event1.getY() - event2.getY() > 100) && (velocityY > 100)) {
-				Log.v("touchevent", "to up");
+			} else if ((event1.getY() - event2.getY() > 100) && (Math.abs(velocityY) > 150)) {
+//				Log.v("touchevent", "to up");
 				gestureAction(toUpAction);
-			} else if((event2.getY() - event1.getY() > 100) && (velocityY > 100)) {
-				Log.v("touchevent", "to down");
+			} else if((event2.getY() - event1.getY() > 100) && (Math.abs(velocityY) > 150)) {
+//				Log.v("touchevent", "to down");
 				gestureAction(toDownAction);
 			}
 			return true;
@@ -240,10 +277,10 @@ public class RememberFragment extends Fragment {
 		String TAG = "GestureAction";
 		switch (action) {
 		case 0:
-			Log.v(TAG, "NULL");
+//			Log.v(TAG, "NULL");
 			break;
 		case 1:
-			Log.v(TAG, "Previous");
+//			Log.v(TAG, "Previous");
 			if (wordcount == 0) {
 				Toast.makeText(getActivity(), "Current word is first in Words", Toast.LENGTH_SHORT).show();
 			} else {
@@ -255,7 +292,7 @@ public class RememberFragment extends Fragment {
 			}
 			break;
 		case 2:
-			Log.v(TAG, "Next");
+			Log.v(TAG, "Next "+ (words.length - 1));
 			if (wordcount == (words.length - 1)) {
 				Toast.makeText(getActivity(), "Currtent word is final word in words", Toast.LENGTH_SHORT).show();
 			} else {
@@ -267,29 +304,47 @@ public class RememberFragment extends Fragment {
 			}
 			break;
 		case 3:
-			Log.v(TAG, "New");	
+//			Log.v(TAG, "New");	
 			break;
 		case 4:
-			Log.v(TAG, "Delete");
+//			Log.v(TAG, "Delete");
 			AlertDialog.Builder builder = new Builder(getActivity());
-			builder.setTitle("Delete?");
-			builder.setMessage("Are you sure to delete this word?");
+			builder.setTitle("删除？");
+			builder.setMessage("你确定要删除这个单词？");
 			builder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-					Log.v("gestureAction", "delete_ok");
+//					Log.v("gestureAction", "delete_ok");
+//					if (dbAdapter == null) {
+//						Log.v("delete",""+ words[wordcount]._id);
+//					}
+//					Log.v("delete",""+ words[wordcount]._id);
 					dbAdapter.deleteOneData(words[wordcount]._id);
-					Toast.makeText(getActivity(), "Deleted successfully", Toast.LENGTH_SHORT).show();
-					getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
+					Toast.makeText(getActivity(), "删除成功 :) ", Toast.LENGTH_SHORT).show();
+//					getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
+					rem_query_image.setEnabled(true);
+					rem_query_image.setVisibility(View.VISIBLE);
+					words = dbAdapter.queryAllData();
+					if ((wordcount != 0) && (wordcount >= words.length)) {
+						wordcount = words.length-1;
+						
+						rem_word_show.setText(words[wordcount].spelling);
+						rew_des_show.setText("");
+					}
+					if (words == null) {
+						rem_word_show.setText("");
+						rew_des_show.setText("");
+						new NoWordDialogFragment().show(getFragmentManager(), null);
+					}
 				}
 			});
 			builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-					Log.v("gestureAction", "delete_cancel");
+//					Log.v("gestureAction", "delete_cancel");
 				}
 			});
 			Dialog dialog = builder.create();
@@ -315,7 +370,7 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-					Log.v("Dialog", ""+arg1);
+//					Log.v("Dialog", ""+arg1);
 					getActivity().finish();
 				}
 			});
@@ -325,8 +380,8 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-					Log.v("Dialog", ""+arg1);
-					getFragmentManager().beginTransaction().replace(R.id.content, activity.getFragment()).commit();
+//					Log.v("Dialog", ""+arg1);
+					getFragmentManager().beginTransaction().replace(R.id.content, activity.getTranslateFragment()).commit();
 					activity.setCurrentFragment(false);
 				}
 			});
@@ -336,7 +391,7 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-					Log.v("Dialog", ""+arg1);
+//					Log.v("Dialog", ""+arg1);
 					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 					intent.setType("*/*");
 					intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -345,7 +400,14 @@ public class RememberFragment extends Fragment {
 					getActivity().startActivityForResult(intent,1);
 				}
 			});
-			
+			builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+				
+				@Override
+				public boolean onKey(DialogInterface arg0, int keycode, KeyEvent event) {
+					// TODO Auto-generated method stub
+					return activity.onKeyDown(keycode, event);
+				}
+			});
 			Dialog dialog = builder.create();
 			dialog.setCanceledOnTouchOutside(false);
 			
@@ -362,34 +424,50 @@ public class RememberFragment extends Fragment {
 			//click cancel of chooser
 			if (data == null) {
 				Log.v("FileSelect", "null");
-				getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
+//				getFragmentManager().beginTransaction().replace(R.id.content, activity.getRememberFragment()).commit();
+				if (words == null) {
+					new NoWordDialogFragment().show(getFragmentManager(), null);
+				}	
 			} else {
 				Uri uri = data.getData();
 				final String filename = uri.getPath();
 //				String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
+				if (dbAdapter == null) {
+					dbAdapter = new DBAdapter(activity);
+					dbAdapter.open();
+				}
 				final XmlAdapter xmlAdapter = new XmlAdapter();
-				final DBAdapter db = new DBAdapter(getActivity());
+				
 				final Handler handler = new Handler() {
 
 					@Override
 					public void handleMessage(Message msg) {
 						// TODO Auto-generated method stub
-						Toast.makeText(getActivity(), "Import Number:" + msg.what, Toast.LENGTH_LONG).show();
-						db.close();
-						getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
+						Toast.makeText(getActivity(), "导入单词数:" + msg.what, Toast.LENGTH_LONG).show();
+						words = dbAdapter.queryAllData();
+						if (words == null) {
+							new NoWordDialogFragment().show(getFragmentManager(), null);
+						} else {
+							rem_word_show.setText(words[wordcount].spelling);
+							rew_des_show.setText("");
+						}
+						
+//						db.close();
+//						getFragmentManager().beginTransaction().replace(R.id.content, activity.getRememberFragment()).commit();
 						
 					}
 					
 				};
-				Log.v("FileSelect", filename);
+//				Log.v("FileSelect", filename);
 				new Thread() {
 
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						db.open();
+//						db.open();
 						Message msg = handler.obtainMessage();
-						msg.what = xmlAdapter.xmlImport(db, filename);
+						msg.what = xmlAdapter.xmlImport(dbAdapter, filename);
+//						Log.v("xmlimport", "TTT");
 						handler.sendMessage(msg);
 					}
 					

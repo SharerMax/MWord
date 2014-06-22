@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.sharermax.mword"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0.0(Beta)" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -32,7 +32,7 @@
         </activity>
         <activity 
             android:name="net.sharermax.mword.AboutActivity"
-            android:label="About"
+            android:label="@string/app_about"
             android:parentActivityName="net.sharermax.mword.SettingPreferenceActivity"></activity>
     </application>
 

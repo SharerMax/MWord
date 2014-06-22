@@ -3,17 +3,15 @@ package net.sharermax.mword;
  * 在线翻译主界面 TranslateFragment
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.08
+ * modify: 2014.06.22
  */
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.jar.JarException;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 
-import org.apache.http.HttpConnection;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -21,13 +19,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParamBean;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,21 +52,31 @@ public class TranslateFragment extends Fragment {
 	private EditText translatInput;
 	private Button addtoremButton;
 	private String translate_word;
-	private DBAdapter dbAdapter;
+	private DBAdapter dbAdapter = null;
 	private String translate_dst;
 	private String translate_src;
+	private static MainActivity activity;
 	
 	private final static String HOST_URL = "http://openapi.baidu.com/public/2.0/bmt/translate";
 	private final static String CLIENT_ID = "w9fgEYaMcEl5MQ47OYK97RVM";
 	private String from;
 	private String to;
 	
+	
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		if (activity instanceof MainActivity) {
+			this.activity = (MainActivity)activity;
+		}
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		dbAdapter = new DBAdapter(getActivity());
-		dbAdapter.open();
 		return inflater.inflate(R.layout.translate_layout, container, false);
 	}
 
@@ -117,7 +125,7 @@ public class TranslateFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Log.v("Translate", "TTTTT");
+//				Log.v("Translate", "TTTTT");
 				translate_word = translatInput.getText().toString();
 				if (translate_word.equals("")) {
 					Toast.makeText(getActivity(), "请输入准备查询的词", Toast.LENGTH_LONG).show();
@@ -160,10 +168,22 @@ public class TranslateFragment extends Fragment {
 	}
 	
 	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		if (dbAdapter == null) {
+			dbAdapter = new DBAdapter(getActivity());
+			dbAdapter.open();
+		}
+	}
+
+	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+//		Log.v("translate", "stop");
 		dbAdapter.close();
+		dbAdapter = null;
 	}
 
 	//请求数据，并对Json数据进行解析
@@ -172,7 +192,7 @@ public class TranslateFragment extends Fragment {
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-			Log.v("json", (String)msg.obj);
+//			Log.v("json", (String)msg.obj);
 			try {
 				JSONObject jsonObject = new JSONObject((String)msg.obj);
 				if (jsonObject.optBoolean("error_code")) {
@@ -213,7 +233,7 @@ public class TranslateFragment extends Fragment {
 						"&q=" + URLEncoder.encode(translate_word, "UTF-8").toString() +
 						"&from=" + from +
 						"&to=" + to;
-				Log.v("Thread", httpUrl);
+//				Log.v("Thread", httpUrl);
 				HttpGet httpGet = new HttpGet(httpUrl);
 				BasicHttpParams params = new BasicHttpParams();
 				//连接超时2s
@@ -227,7 +247,7 @@ public class TranslateFragment extends Fragment {
 					Message msg = handler.obtainMessage();
 					msg.obj = strResult;
 					handler.sendMessage(msg);
-					Log.v("network", "ok");
+//					Log.v("network", "ok");
 				} else {
 					
 				}
@@ -247,7 +267,7 @@ public class TranslateFragment extends Fragment {
 				e.printStackTrace();
 			}
 			
-			Log.v("WORKTHREAD", Thread.currentThread().getName());
+//			Log.v("WORKTHREAD", Thread.currentThread().getName());
 		}
 		
 	}

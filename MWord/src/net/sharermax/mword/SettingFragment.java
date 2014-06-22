@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * 设置界面 SettingFragment
  * author: SharerMax
  * create: 2014.05.30
- * modify: 2014.06.10
+ * modify: 2014.06.22
  */
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -17,7 +17,7 @@ public class SettingFragment extends PreferenceFragment {
 	private ListPreference remGestureToLeft;
 	private ListPreference remGestureToUp;
 	private ListPreference remGestureToDown;
-	private ListPreference remFontColor;
+//	private ListPreference remFontColor;
 	
 	private ListPreference translateApi;
 	
@@ -30,7 +30,7 @@ public class SettingFragment extends PreferenceFragment {
 		remGestureToLeft = (ListPreference)findPreference(PreferenceKey.GESTURE_TOLEFT_KEY);
 		remGestureToUp = (ListPreference)findPreference(PreferenceKey.GESTURE_TOUP_KEY);
 		remGestureToDown = (ListPreference)findPreference(PreferenceKey.GESTURE_TODOWN_KEY);
-		remFontColor = (ListPreference)findPreference(PreferenceKey.REM_FONT_COLOR_KEY);
+//		remFontColor = (ListPreference)findPreference(PreferenceKey.REM_FONT_COLOR_KEY);
 		
 		translateApi = (ListPreference)findPreference(PreferenceKey.TRANSLATE_API_KEY);
 		
@@ -47,7 +47,7 @@ public class SettingFragment extends PreferenceFragment {
 		remGestureToUp.setOnPreferenceChangeListener(myGesturePreferenceChangelistener);
 		remGestureToDown.setOnPreferenceChangeListener(myGesturePreferenceChangelistener);
 		
-		remFontColor.setOnPreferenceChangeListener(new FontColorPreferenceChangeListener());
+//		remFontColor.setOnPreferenceChangeListener(new FontColorPreferenceChangeListener());
 	}
 	class GesturePreferenceChangelistener implements OnPreferenceChangeListener {
 		@Override
@@ -77,14 +77,14 @@ public class SettingFragment extends PreferenceFragment {
 			return true;
 		}
 	}
-	class FontColorPreferenceChangeListener implements OnPreferenceChangeListener {
-		@Override
-		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			// TODO Auto-generated method stub
-			if (preference instanceof ListPreference) {
-				System.out.println(Integer.parseInt((String)newValue, 16));
-			}
-			return true;
-		}
-	}
+//	class FontColorPreferenceChangeListener implements OnPreferenceChangeListener {
+//		@Override
+//		public boolean onPreferenceChange(Preference preference, Object newValue) {
+//			// TODO Auto-generated method stub
+//			if (preference instanceof ListPreference) {
+////				System.out.println(Integer.parseInt((String)newValue, 16));
+//			}
+//			return true;
+//		}
+//	}
 }
