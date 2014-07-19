@@ -33,7 +33,12 @@
         <activity 
             android:name="net.sharermax.mword.AboutActivity"
             android:label="@string/app_about"
-            android:parentActivityName="net.sharermax.mword.SettingPreferenceActivity"></activity>
+            android:parentActivityName="net.sharermax.mword.SettingPreferenceActivity">
+        </activity>
+        <activity 
+            android:name=".SlidingMenuActivity"
+            android:label="SlideTest">
+        </activity>
     </application>
 
 </manifest>

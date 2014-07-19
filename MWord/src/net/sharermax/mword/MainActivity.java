@@ -43,14 +43,8 @@ public class MainActivity extends Activity {
 		translateFragment = new TranslateFragment();
 		
 		fragmentManager = getFragmentManager();
-//		FragmentTransaction transaction = fragmentManager.beginTransaction().setCustomAnimations(
-//				android.R.anim.fade_in, android.R.anim.fade_out);
 		
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
-//		transaction.add(R.id.content, rememberFragment);
-//		transaction.add(R.id.content, translateFragment).commit();
-//		transaction.hide(translateFragment).show(rememberFragment);
-//		transaction.commit();
 		currentFragment = true;
 		
 	}
@@ -112,6 +106,11 @@ public class MainActivity extends Activity {
 		case R.id.action_export:
 //			Log.v("oooooppppptttt", "exportaction");
 			CreateExportProgressDialog();
+			return true;
+		case R.id.action_test:
+			Log.v("MainActivity", "Test");
+			Intent slideIntent = new Intent(this, SlidingMenuActivity.class);
+			startActivity(slideIntent);
 			return true;
 		default:
 			break;
