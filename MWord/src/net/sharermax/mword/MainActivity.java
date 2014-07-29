@@ -5,8 +5,12 @@ package net.sharermax.mword;
  * create: 2014.05.27
  * modify: 2014.06.22
  */
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
+
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
+import android.R.menu;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -34,6 +38,7 @@ public class MainActivity extends Activity {
 	private Handler handler;
 	private XmlAdapter xmlAdapter;
 	private String expotrpath;
+	private SlidingMenu slidingMenu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,20 @@ public class MainActivity extends Activity {
 		
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
 		currentFragment = true;
+		slidingMenu = new SlidingMenu(this);
+		slidingMenu.setMode(SlidingMenu.LEFT);
+		slidingMenu.setFadeDegree(0.35f);
+		slidingMenu.setShadowDrawable(R.drawable.shadow);
+		slidingMenu.setShadowWidth(15);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+		slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+
+		slidingMenu.setMenu(R.layout.menu);
+		slidingMenu.setOnClosedListener(new MenuClosedListener());
+		getFragmentManager().beginTransaction().replace(R.id.slidingmenu, new SettingFragment(), "SettingFragment").commit();
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 	}
 	
@@ -89,11 +108,6 @@ public class MainActivity extends Activity {
 			}
 			currentFragment = !currentFragment;
 			return true;
-		case R.id.action_settings:
-			Intent intent = new Intent();
-			intent.setClass(this, SettingPreferenceActivity.class);
-			startActivity(intent);
-			return true;
 		case R.id.action_import:
 //			Log.v("oooooppppptttt", "importaction");
 			Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -107,11 +121,9 @@ public class MainActivity extends Activity {
 //			Log.v("oooooppppptttt", "exportaction");
 			CreateExportProgressDialog();
 			return true;
-		case R.id.action_test:
-			Log.v("MainActivity", "Test");
-			Intent slideIntent = new Intent(this, SlidingMenuActivity.class);
-			startActivity(slideIntent);
-			return true;
+		case android.R.id.home:
+			Log.v("MainActivity", "home");
+			slidingMenu.toggle();
 		default:
 			break;
 		}
@@ -225,5 +237,16 @@ public class MainActivity extends Activity {
 			
 		}
 		
+	}
+	//when slidingMenu Closed 
+	class MenuClosedListener implements OnClosedListener {
+		@Override
+		public void onClosed() {
+			// TODO Auto-generated method stub
+			if (currentFragment) {
+				rememberFragment.readConfig();
+				rememberFragment.applyConfig();
+			}
+		}
 	}
 }

@@ -7,7 +7,9 @@
     <ListView
         android:id="@+id/about_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dip"
+        android:layout_marginEnd="6dip" >
     </ListView>
     <ImageView 
         android:layout_width="match_parent"

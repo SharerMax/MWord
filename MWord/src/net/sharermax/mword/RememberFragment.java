@@ -53,6 +53,8 @@ public class RememberFragment extends Fragment {
 	private DBAdapter dbAdapter = null;
 	private Word words[];
 	private int wordcount = 0;
+	private int remFontSize;
+	private int remFontColor;
 	private static MainActivity activity;
 	
 	public RememberFragment() {
@@ -101,20 +103,8 @@ public class RememberFragment extends Fragment {
 		super.onStart();
 //		Log.v("Fragment", "onstart");
 
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "#000000").substring(1);
-		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "1");
-		String toLeftActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TOLEFT_KEY, "2");
-		String toUpActionSting = sharedPreferences.getString(PreferenceKey.GESTURE_TOUP_KEY, "0");
-		String toDownActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TODOWN_KEY, "0");
-		int remFontSize = sharedPreferences.getInt(PreferenceKey.REM_FONT_SIZE_KEY, 2);
-		int remFontColor = Integer.parseInt(remFontColorString, 16) | 0xff000000;
-		toRightAction = Integer.parseInt(toRightActionString);
-		toLeftAction = Integer.parseInt(toLeftActionString);
-		toUpAction = Integer.parseInt(toUpActionSting);
-		toDownAction = Integer.parseInt(toDownActionString);
-		rem_word_show.setTextColor(remFontColor);
-		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);
+		readConfig();
+		applyConfig();
 		
 		if (dbAdapter == null) {
 			dbAdapter = new DBAdapter(activity);
@@ -129,6 +119,26 @@ public class RememberFragment extends Fragment {
 		} else {
 			rem_word_show.setText(words[0].spelling);
 		}
+	}
+
+	public void applyConfig() {
+		rem_word_show.setTextColor(remFontColor);
+		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);
+	}
+
+	public void readConfig() {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "#000000").substring(1);
+		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "1");
+		String toLeftActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TOLEFT_KEY, "2");
+		String toUpActionSting = sharedPreferences.getString(PreferenceKey.GESTURE_TOUP_KEY, "0");
+		String toDownActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TODOWN_KEY, "0");
+		remFontSize = sharedPreferences.getInt(PreferenceKey.REM_FONT_SIZE_KEY, 2);
+		remFontColor = Integer.parseInt(remFontColorString, 16) | 0xff000000;
+		toRightAction = Integer.parseInt(toRightActionString);
+		toLeftAction = Integer.parseInt(toLeftActionString);
+		toUpAction = Integer.parseInt(toUpActionSting);
+		toDownAction = Integer.parseInt(toDownActionString);
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -282,7 +292,7 @@ public class RememberFragment extends Fragment {
 		case 1:
 //			Log.v(TAG, "Previous");
 			if (wordcount == 0) {
-				Toast.makeText(getActivity(), "Current word is first in Words", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), getString(R.string.first_word_info), Toast.LENGTH_SHORT).show();
 			} else {
 				wordcount--;
 				rem_query_image.setEnabled(true);
@@ -294,7 +304,7 @@ public class RememberFragment extends Fragment {
 		case 2:
 			Log.v(TAG, "Next "+ (words.length - 1));
 			if (wordcount == (words.length - 1)) {
-				Toast.makeText(getActivity(), "Currtent word is final word in words", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), getString(R.string.final_word_info), Toast.LENGTH_SHORT).show();
 			} else {
 				wordcount++;
 				rem_query_image.setEnabled(true);

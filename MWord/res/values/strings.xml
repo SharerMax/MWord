@@ -15,6 +15,7 @@
     <string name="action_export">导出单词</string>
     
     <!-- Remember Setting  -->
+    <string name="remember_setting">助手设置</string>
     <string name="font_size">字体大小</string>
     <string name="font_color">字体颜色</string>
     <string name="setting_font_remember">助手字体设置</string>
@@ -28,6 +29,8 @@
     <string name="gesture_toup">向上滑动</string>
     <string name="gesture_todown">向下滑动</string>
     <string name="gesture_custom_dilogtitle">动作选择</string>
+    <string name="first_word_info">这已经是第一个单词了⊙﹏⊙b汗</string>
+    <string name="final_word_info">这已经是最后一个单词了~\(≧▽≦)/~</string>
     <!-- Translate Setting -->
     <string name="setting_translate">翻译设置</string>
     <string name="translate_API">翻译API</string>
