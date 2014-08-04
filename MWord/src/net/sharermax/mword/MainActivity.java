@@ -3,20 +3,14 @@ package net.sharermax.mword;
  * 主Activity 存在两个Fragment 包括RememberFragment、TranslateFragment 默认显示RememberFragment
  * author: SharerMax
  * create: 2014.05.27
- * modify: 2014.06.22
+ * modify: 2014.08.04
  */
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
-
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
-import android.R.menu;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.hardware.input.InputManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,9 +20,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 
 public class MainActivity extends Activity {
 

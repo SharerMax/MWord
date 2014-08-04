@@ -3,7 +3,7 @@ package net.sharermax.mword;
  * RememberFragment 记单词主界面
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.22
+ * modify: 2014.08.04
  */
 
 import net.sharermax.mword.database.DBAdapter;

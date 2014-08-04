@@ -3,25 +3,22 @@ package net.sharermax.mword;
  * 在线翻译主界面 TranslateFragment
  * author: SharerMax
  * create: 2014.05.29
- * modify: 2014.06.22
+ * modify: 2014.08.04
  */
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
+import net.sharermax.mword.network.NetworkConnection;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +26,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +45,6 @@ public class TranslateFragment extends Fragment {
 
 	private Button translateButton;
 	private TextView translate_des;
-	private Handler handler;
-	private NetWorkThread myThread;
 	private RadioGroup translateGroup;
 	private EditText translatInput;
 	private Button addtoremButton;
@@ -58,7 +52,7 @@ public class TranslateFragment extends Fragment {
 	private DBAdapter dbAdapter = null;
 	private String translate_dst;
 	private String translate_src;
-	private static MainActivity activity;
+	private  MainActivity activity;
 	
 	private final static String HOST_URL = "http://openapi.baidu.com/public/2.0/bmt/translate";
 	private final static String CLIENT_ID = "w9fgEYaMcEl5MQ47OYK97RVM";
@@ -101,13 +95,13 @@ public class TranslateFragment extends Fragment {
 			
 			
 			@Override
-			public void onCheckedChanged(RadioGroup arg0, int arg1) {
+			public void onCheckedChanged(RadioGroup arg0, int selection) {
 				// TODO Auto-generated method stub
 				translate_des.setText("");
 				translatInput.setText("");
 				translate_src = "";
 				translate_dst = "";
-				switch (arg1) {
+				switch (selection) {
 				case R.id.zhtoen_radiobutton:
 					from = "zh";
 					to = "en";
@@ -130,16 +124,31 @@ public class TranslateFragment extends Fragment {
 				// TODO Auto-generated method stub
 //				Log.v("Translate", "TTTTT");
 				translate_word = translatInput.getText().toString();
-				
+				translate_des.setText("");
+				if (! new NetworkConnection(activity.getApplicationContext()).isConnected()) {
+					Toast.makeText(getActivity(), "网络不可用(─.─|||", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				
 				if (translate_word.equals("")) {
 					Toast.makeText(getActivity(), "请输入准备查询的词", Toast.LENGTH_LONG).show();
 				} else {
 					setEditTextLostFocus();
 					hideKeyboard();
-					handler = new MyHandler();
-					myThread = new NetWorkThread();
-					myThread.start();
+					String httpUrl;
+					try {
+						httpUrl = HOST_URL + "?" +
+								"client_id=" + CLIENT_ID +
+								"&q=" + URLEncoder.encode(translate_word, "UTF-8").toString() +
+								"&from=" + from +
+								"&to=" + to;
+						TranslaterTask myTask = new TranslaterTask();
+						myTask.execute(httpUrl);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			}
 		});
@@ -182,6 +191,10 @@ public class TranslateFragment extends Fragment {
 			dbAdapter = new DBAdapter(getActivity());
 			dbAdapter.open();
 		}
+		
+		if (! new NetworkConnection(activity.getApplicationContext()).isConnected()) {
+			Toast.makeText(getActivity(), "网络不可用(─.─|||", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -192,16 +205,57 @@ public class TranslateFragment extends Fragment {
 		dbAdapter.close();
 		dbAdapter = null;
 	}
-
-	//请求数据，并对Json数据进行解析
-	class MyHandler extends Handler {
-
+	
+	private class TranslaterTask extends AsyncTask<String, String, String> {
 		@Override
-		public void handleMessage(Message msg) {
+		protected String doInBackground(String... httpUrl) {
 			// TODO Auto-generated method stub
-//			Log.v("json", (String)msg.obj);
 			try {
-				JSONObject jsonObject = new JSONObject((String)msg.obj);
+				URL url = new URL(httpUrl[0]);
+				Log.v("aysnctask", httpUrl[0]);
+				HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+				httpURLConnection.setConnectTimeout(3000);
+				httpURLConnection.setDoInput(true);
+				httpURLConnection.setRequestMethod("GET");
+				
+				if (httpURLConnection.getResponseCode()== HttpStatus.SC_OK) {
+					InputStream resultInputStream = httpURLConnection.getInputStream();
+					
+					BufferedReader resultBufferedReader = new BufferedReader(new InputStreamReader(resultInputStream));
+					String strResult = "";
+					String lineString = null;
+					while ((lineString = resultBufferedReader.readLine()) != null) {
+						strResult += lineString;
+						Log.v("bufferredreader", strResult);
+					}
+					resultInputStream.close();
+					resultBufferedReader.close();
+					httpURLConnection.disconnect();
+					return strResult;
+				} else {
+					Toast.makeText(getActivity(), "响应错误(─.─|||", Toast.LENGTH_SHORT).show();
+					return null;
+				}
+				
+			} catch (java.net.SocketTimeoutException e) {
+				// TODO: handle exception
+				Toast.makeText(getActivity(), "网络貌似不给力(─.─|||", Toast.LENGTH_SHORT).show();
+				Log.v("network", "connectException");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+			
+		}
+		@Override
+		protected void onPostExecute(String strResult) {
+			// TODO Auto-generated method stub
+			try {
+				if (strResult == null) {
+					return;
+				}
+				JSONObject jsonObject = new JSONObject(strResult);
 				if (jsonObject.optBoolean("error_code")) {
 					switch (Integer.parseInt(jsonObject.getString("error_code"))) {
 					case 52001:
@@ -226,65 +280,7 @@ public class TranslateFragment extends Fragment {
 				e.printStackTrace();
 			}
 		}
-		
-	}
-	class NetWorkThread extends Thread {
 
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			
-			try {
-				String httpUrl = HOST_URL + "?" +
-						"client_id=" + CLIENT_ID +
-						"&q=" + URLEncoder.encode(translate_word, "UTF-8").toString() +
-						"&from=" + from +
-						"&to=" + to;
-//				Log.v("Thread", httpUrl);
-//				HttpGet httpGet = new HttpGet(httpUrl);
-//				BasicHttpParams params = new BasicHttpParams();
-//				//连接超时2s
-//				HttpConnectionParams.setConnectionTimeout(params, 2000);
-//				//请求超时2s
-//				HttpConnectionParams.setSoTimeout(params, 2000);
-//				HttpClient httpClient = new DefaultHttpClient(params);
-//				HttpResponse httpResponse = httpClient.execute(httpGet);
-				HttpClient httpClient = new DefaultHttpClient();
-				
-				//连接超时 3s
-				HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 3000);
-				//读取超时 3s
-				HttpConnectionParams.setSoTimeout(httpClient.getParams(), 3000);
-				HttpGet httpGet = new HttpGet(httpUrl);
-				HttpResponse httpResponse = httpClient.execute(httpGet);
-				if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-					String strResult = EntityUtils.toString(httpResponse.getEntity());
-					Message msg = handler.obtainMessage();
-					msg.obj = strResult;
-					handler.sendMessage(msg);
-					Log.v("network", "ok");
-				} else {
-					Log.v("network", "oh ,no");
-				}
-			} catch (java.net.ConnectException e) {
-				// TODO: handle exception
-				Toast.makeText(getActivity(), "连接超时", Toast.LENGTH_SHORT).show();
-				Log.v("network", "connectException");
-			} catch (java.net.SocketTimeoutException e) {
-				// TODO: handle exception
-				Toast.makeText(getActivity(), "请求超时", Toast.LENGTH_SHORT).show();
-				Log.v("network", "connectException");
-			}catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-//			Log.v("WORKTHREAD", Thread.currentThread().getName());
-		}
-		
 	}
 	
 	public void setEditTextLostFocus() {
