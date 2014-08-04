@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -127,9 +130,13 @@ public class TranslateFragment extends Fragment {
 				// TODO Auto-generated method stub
 //				Log.v("Translate", "TTTTT");
 				translate_word = translatInput.getText().toString();
+				
+				
 				if (translate_word.equals("")) {
 					Toast.makeText(getActivity(), "请输入准备查询的词", Toast.LENGTH_LONG).show();
 				} else {
+					setEditTextLostFocus();
+					hideKeyboard();
 					handler = new MyHandler();
 					myThread = new NetWorkThread();
 					myThread.start();
@@ -234,31 +241,39 @@ public class TranslateFragment extends Fragment {
 						"&from=" + from +
 						"&to=" + to;
 //				Log.v("Thread", httpUrl);
+//				HttpGet httpGet = new HttpGet(httpUrl);
+//				BasicHttpParams params = new BasicHttpParams();
+//				//连接超时2s
+//				HttpConnectionParams.setConnectionTimeout(params, 2000);
+//				//请求超时2s
+//				HttpConnectionParams.setSoTimeout(params, 2000);
+//				HttpClient httpClient = new DefaultHttpClient(params);
+//				HttpResponse httpResponse = httpClient.execute(httpGet);
+				HttpClient httpClient = new DefaultHttpClient();
+				
+				//连接超时 3s
+				HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 3000);
+				//读取超时 3s
+				HttpConnectionParams.setSoTimeout(httpClient.getParams(), 3000);
 				HttpGet httpGet = new HttpGet(httpUrl);
-				BasicHttpParams params = new BasicHttpParams();
-				//连接超时2s
-				HttpConnectionParams.setConnectionTimeout(params, 2000);
-				//请求超时2s
-				HttpConnectionParams.setSoTimeout(params, 2000);
-				HttpClient httpClient = new DefaultHttpClient(params);
 				HttpResponse httpResponse = httpClient.execute(httpGet);
 				if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 					String strResult = EntityUtils.toString(httpResponse.getEntity());
 					Message msg = handler.obtainMessage();
 					msg.obj = strResult;
 					handler.sendMessage(msg);
-//					Log.v("network", "ok");
+					Log.v("network", "ok");
 				} else {
-					
+					Log.v("network", "oh ,no");
 				}
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
 			} catch (java.net.ConnectException e) {
 				// TODO: handle exception
-				Toast.makeText(getActivity(), "连接超时", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), "连接超时", Toast.LENGTH_SHORT).show();
+				Log.v("network", "connectException");
 			} catch (java.net.SocketTimeoutException e) {
 				// TODO: handle exception
-				Toast.makeText(getActivity(), "请求超时", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), "请求超时", Toast.LENGTH_SHORT).show();
+				Log.v("network", "connectException");
 			}catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -270,5 +285,17 @@ public class TranslateFragment extends Fragment {
 //			Log.v("WORKTHREAD", Thread.currentThread().getName());
 		}
 		
+	}
+	
+	public void setEditTextLostFocus() {
+		translate_des.setFocusable(true);
+		translate_des.setFocusableInTouchMode(true);
+		translate_des.requestFocus();
+		
+	}
+	
+	public void hideKeyboard() {
+		InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(translatInput.getWindowToken(), inputMethodManager.HIDE_NOT_ALWAYS);
 	}
 }

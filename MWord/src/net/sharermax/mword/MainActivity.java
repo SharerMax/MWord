@@ -7,6 +7,7 @@ package net.sharermax.mword;
  */
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
@@ -15,6 +16,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.hardware.input.InputManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -62,6 +66,7 @@ public class MainActivity extends Activity {
 
 		slidingMenu.setMenu(R.layout.menu);
 		slidingMenu.setOnClosedListener(new MenuClosedListener());
+		slidingMenu.setOnOpenListener(new MenuOpenListener());
 		getFragmentManager().beginTransaction().replace(R.id.slidingmenu, new SettingFragment(), "SettingFragment").commit();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,10 +106,12 @@ public class MainActivity extends Activity {
 			if(currentFragment) {
 				//switch to Translate Fragment
  				fragmentManager.beginTransaction().replace(R.id.content, translateFragment).commit();
+ 				item.setIcon(R.drawable.translate_indicator);
 				
 			}else {
 				//switch to Remember Fragment
 				fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
+				item.setIcon(R.drawable.remember_indicator);
 			}
 			currentFragment = !currentFragment;
 			return true;
@@ -246,6 +253,17 @@ public class MainActivity extends Activity {
 			if (currentFragment) {
 				rememberFragment.readConfig();
 				rememberFragment.applyConfig();
+			}
+		}
+	}
+	//when slidingMenu open
+	class MenuOpenListener implements OnOpenListener {
+		@Override
+		public void onOpen() {
+			// TODO Auto-generated method stub
+			if (!currentFragment) {
+				translateFragment.setEditTextLostFocus();
+				translateFragment.hideKeyboard();
 			}
 		}
 	}

@@ -5,7 +5,7 @@
         android:showAsAction="always"
         android:title="@string/action_switch"
         android:visible="true"
-        android:icon="@android:drawable/ic_media_play"/>
+        android:icon="@drawable/remember_indicator"/>
     <item 
         android:id="@+id/action_import"
         android:orderInCategory="50"
