@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.sharermax.mword"
-    android:versionCode="10"
-    android:versionName="1.0.1(Beta)" >
+    android:versionCode="15"
+    android:versionName="1.0.3(Beta)" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -32,6 +32,12 @@
             android:label="@string/app_about"
             android:theme="@style/AppTheme"
             android:parentActivityName="net.sharermax.mword.MainActivity">
+        </activity>
+        <activity 
+            android:name="net.sharermax.mword.BasicSettingActivity"
+            android:theme="@style/AppTheme"
+            android:parentActivityName="net.sharermax.mword.MainActivity">
+            
         </activity>
     </application>
 

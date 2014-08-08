@@ -18,11 +18,22 @@
     <string name="remember_setting">助手设置</string>
     <string name="font_size">字体大小</string>
     <string name="font_color">字体颜色</string>
-    <string name="setting_font_remember">助手字体设置</string>
-    <string name="set_remember_font_size">设置字体大小</string>
-    <string name="set_remember_font_color">设置字体颜色</string>
+    <string name="word_font_size">单词字体大小</string>
+    <string name="des_font_size">释义字体大小</string>
+    <string name="word_font_color">单词字体颜色</string>
+    <string name="des_font_color">释义字体颜色</string>
+    <string name="setting_font_remember">字体设置</string>
+    <string name="setting_font_remember_summary">字体大小、颜色设置</string>
+    <string name="setting_word_font_remember">单词字体设置</string>
+    <string name="setting_des_font_remember">释义字体设置</string>
+    <string name="set_rem_word_font_size_summary">设置单词字体大小</string>
+    <string name="set_rem_word_font_color_summary">设置单词字体颜色</string>
+    <string name="set_rem_des_font_size_summary">设置释义字体大小</string>
+    <string name="set_rem_des_font_color_summary">设置释义字体颜色</string>
     
     <!-- Gesture Setting -->
+    <string name="setting_gesture">手势设置</string>
+    <string name="setting_gesture_summary">单词释义区手势设置</string>
     <string name="setting_gesture_custom">自定义手势</string>
     <string name="gesture_toleft">向左滑动</string>
     <string name="gesture_toright">向右滑动</string>

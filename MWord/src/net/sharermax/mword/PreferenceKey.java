@@ -1,18 +1,19 @@
 package net.sharermax.mword;
-/********************
- * Prerference Key 
- * author: SharerMax
- * create: 2014.06.07
- * modify: 2014.06.16
- */
+
 public class PreferenceKey {
-	public final static String REM_FONT_SIZE_KEY = "rem_font_size_key";
-	public final static String REM_FONT_COLOR_KEY = "rem_font_color_key";
+	public final static String REM_SETIING_FONT_KEY = "rem_setting_font_key";
+	public final static String REM_WORD_FONT_SIZE_KEY = "rem_word_font_size_key";
+	public final static String REM_WORD_FONT_COLOR_KEY = "rem_word_font_color_key";
+	public final static String REM_DES_FONT_SIZE_KEY = "rem_des_font_size_key";
+	public final static String REM_DES_FONT_COLOR_KEY = "rem_des_font_color_key";
 	
-	public final static String GESTURE_TORIGHT_KEY = "gestureToRight_key";
-	public final static String GESTURE_TOLEFT_KEY = "gestureToLeft_key";
-	public final static String GESTURE_TOUP_KEY = "gestureToUp_key";
-	public final static String GESTURE_TODOWN_KEY = "gestureToDown_key";
+	public final static String REM_SETTING_GESTURE_KEY = "rem_setting_gesture_key";
+	public final static String REM_GESTURE_TORIGHT_KEY = "rem_gestureToRight_key";
+	public final static String REM_GESTURE_TOLEFT_KEY = "rem_gestureToLeft_key";
+	public final static String REM_GESTURE_TOUP_KEY = "rem_gestureToUp_key";
+	public final static String REM_GESTURE_TODOWN_KEY = "rem_gestureToDown_key";
 	
 	public final static String TRANSLATE_API_KEY = "translate_api_key";
+	
+	public final static String ABOUT_KEY = "about_key";
 }

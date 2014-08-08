@@ -37,11 +37,20 @@ public class RemFontSizeDialogPreference extends DialogPreference {
 	protected void onBindDialogView(View view) {
 		// TODO Auto-generated method stub
 		super.onBindDialogView(view);
-		fontsizeSeekBar = (SeekBar)(view.findViewById(R.id.rem_frontsize_Bar));
-		previewView = (TextView)(view.findViewById(R.id.rem_frontsize_view));
 		
+		fontsizeSeekBar = (SeekBar)(view.findViewById(R.id.rem_frontsize_Bar));
+		previewView = (TextView)(view.findViewById(R.id.rem_frontsize_view));		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		rem_front_size = sharedPreferences.getInt(PreferenceKey.REM_FONT_SIZE_KEY, 2);
+		String title = (String) getTitle();
+		if (title.equals(getContext().getString(R.string.word_font_size))) {
+			rem_front_size = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_SIZE_KEY, 2);
+		} else if(title.equals(getContext().getString(R.string.des_font_size))) {
+			rem_front_size = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_SIZE_KEY, 1);
+		} else {
+			//default value
+			rem_front_size = 1;
+		}
+		
 		previewView.setTextSize(TypedValue.COMPLEX_UNIT_SP, (rem_front_size + 1) * 10);
 		fontsizeSeekBar.setProgress(rem_front_size);
 		

@@ -1,10 +1,4 @@
 package net.sharermax.mword;
-/********************
- * 关于Activity 
- * author: SharerMax
- * create: 2014.06.15
- * modify: 2014.06.22
- */
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

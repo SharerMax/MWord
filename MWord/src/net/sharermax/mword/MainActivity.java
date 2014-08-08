@@ -1,10 +1,5 @@
 package net.sharermax.mword;
-/********************
- * 主Activity 存在两个Fragment 包括RememberFragment、TranslateFragment 默认显示RememberFragment
- * author: SharerMax
- * create: 2014.05.27
- * modify: 2014.08.04
- */
+
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
 import android.app.Activity;
@@ -63,10 +58,10 @@ public class MainActivity extends Activity {
 		slidingMenu.setMenu(R.layout.menu);
 		slidingMenu.setOnClosedListener(new MenuClosedListener());
 		slidingMenu.setOnOpenListener(new MenuOpenListener());
-		getFragmentManager().beginTransaction().replace(R.id.slidingmenu, new SettingFragment(), "SettingFragment").commit();
+		getFragmentManager().beginTransaction().replace(R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+//		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 	}
 	
 	public TranslateFragment getTranslateFragment() {
@@ -137,8 +132,15 @@ public class MainActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) { 
+			if (slidingMenu.isMenuShowing()) {
+				slidingMenu.toggle();
+				return true;
+			}
+//			Log.v("MenuShowing", msg)
 			if((System.currentTimeMillis()-exitTime) > 2000) { 
-				Toast.makeText(MainActivity.this, "2秒内再次点击返回退出应用", Toast.LENGTH_SHORT).show();
+				//Toast.LENGTH_SHORT 2s
+				//Toast.LENGTH_LONG 3.5s
+				Toast.makeText(MainActivity.this, "再次点击即退出应用", Toast.LENGTH_SHORT).show();
 				exitTime = System.currentTimeMillis(); 
 			} else { 
 				this.finish();

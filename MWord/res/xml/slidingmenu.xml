@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory 
-        android:title="@string/remember_setting"></PreferenceCategory>
-
+        android:title="@string/remember_setting"
+        android:key="remSetting">
+        <Preference
+            android:key="rem_setting_font_key" 
+            android:title="@string/setting_font_remember"
+            android:summary="@string/setting_font_remember_summary"/>
+        <Preference
+            android:key="rem_setting_gesture_key" 
+            android:title="@string/setting_gesture"
+            android:summary="@string/setting_gesture_summary"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/setting_translate"
+        android:key="translateSetting">
+        <ListPreference 
+            android:key="translate_api_key"
+            android:title="@string/translate_API"
+            android:dialogTitle="@string/translate_API_select"
+            android:entries="@array/translate_api_entry"
+            android:entryValues="@array/translate_api_entryValue"
+            android:defaultValue="baidu"
+            android:negativeButtonText="@string/dialog_cancel"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/app_about">
+        <Preference
+            android:title="@string/app_about"
+            android:key="about_key"
+            android:summary="@string/app_about_summary"/>
+    </PreferenceCategory>
 </PreferenceScreen>

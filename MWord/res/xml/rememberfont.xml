@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory 
+        android:title="@string/setting_word_font_remember"
+        android:key="remFontSetting">
+        <net.sharermax.mword.RemFontSizeDialogPreference
+            android:key="rem_word_font_size_key"
+            android:title="@string/word_font_size"
+            android:summary="@string/set_rem_word_font_size_summary"
+            android:dialogTitle="@string/word_font_size"
+            android:dialogLayout="@layout/rem_fontsize"
+            android:defaultValue="2"
+            android:positiveButtonText="@string/dialog_ok"
+            android:negativeButtonText="@string/dialog_cancel"/>
+        <ListPreference
+            android:key="rem_word_font_color_key"
+            android:title="@string/word_font_color"
+            android:dialogTitle="@string/word_font_color"
+            android:entries="@array/rem_fontcolor_entry"
+            android:entryValues="@array/rem_fontcolor_entryvalue"
+            android:summary="@string/set_rem_word_font_color_summary"
+            android:defaultValue="#000000"
+            android:negativeButtonText="@string/dialog_cancel"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/setting_des_font_remember">
+        <net.sharermax.mword.RemFontSizeDialogPreference
+            android:key="rem_des_font_size_key"
+            android:title="@string/des_font_size"
+            android:summary="@string/set_rem_des_font_size_summary"
+            android:dialogTitle="@string/des_font_size"
+            android:dialogLayout="@layout/rem_fontsize"
+            android:defaultValue="1"
+            android:positiveButtonText="@string/dialog_ok"
+            android:negativeButtonText="@string/dialog_cancel"/>
+        <ListPreference
+            android:key="rem_des_font_color_key"
+            android:title="@string/des_font_color"
+            android:dialogTitle="@string/des_font_color"
+            android:entries="@array/rem_fontcolor_entry"
+            android:entryValues="@array/rem_fontcolor_entryvalue"
+            android:summary="@string/set_rem_des_font_color_summary"
+            android:defaultValue="#000000"
+            android:negativeButtonText="@string/dialog_cancel"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,10 +1,5 @@
 package net.sharermax.mword;
-/********************
- * RememberFragment 记单词主界面
- * author: SharerMax
- * create: 2014.05.29
- * modify: 2014.08.04
- */
+
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
@@ -43,7 +38,7 @@ import android.widget.Toast;
 public class RememberFragment extends Fragment {
 
 	private TextView rem_word_show;
-	private TextView rew_des_show;
+	private TextView rem_des_show_des_show;
 	private ImageView rem_query_image;
 	private GestureDetector gestureDetector;
 	private int toRightAction;
@@ -53,8 +48,10 @@ public class RememberFragment extends Fragment {
 	private DBAdapter dbAdapter = null;
 	private Word words[];
 	private int wordcount = 0;
-	private int remFontSize;
-	private int remFontColor;
+	private int remWordFontSize;
+	private int remWordFontColor;
+	private int remDesFontSize;
+	private int remDesFontColor;
 	private static MainActivity activity;
 	
 	public RememberFragment() {
@@ -122,19 +119,24 @@ public class RememberFragment extends Fragment {
 	}
 
 	public void applyConfig() {
-		rem_word_show.setTextColor(remFontColor);
-		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remFontSize +  1) * 10);
+		rem_word_show.setTextColor(remWordFontColor);
+		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remWordFontSize +  1) * 10);
+		rem_des_show_des_show.setTextColor(remDesFontColor);
+		rem_des_show_des_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remDesFontSize +  1) * 10);
 	}
 
 	public void readConfig() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String remFontColorString = sharedPreferences.getString(PreferenceKey.REM_FONT_COLOR_KEY, "#000000").substring(1);
-		String toRightActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TORIGHT_KEY, "1");
-		String toLeftActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TOLEFT_KEY, "2");
-		String toUpActionSting = sharedPreferences.getString(PreferenceKey.GESTURE_TOUP_KEY, "0");
-		String toDownActionString = sharedPreferences.getString(PreferenceKey.GESTURE_TODOWN_KEY, "0");
-		remFontSize = sharedPreferences.getInt(PreferenceKey.REM_FONT_SIZE_KEY, 2);
-		remFontColor = Integer.parseInt(remFontColorString, 16) | 0xff000000;
+		String remWordFontColorString = sharedPreferences.getString(PreferenceKey.REM_WORD_FONT_COLOR_KEY, "#000000").substring(1);
+		String remDesFontColorString = sharedPreferences.getString(PreferenceKey.REM_DES_FONT_COLOR_KEY, "#000000").substring(1);
+		String toRightActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TORIGHT_KEY, "1");
+		String toLeftActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TOLEFT_KEY, "2");
+		String toUpActionSting = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TOUP_KEY, "0");
+		String toDownActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TODOWN_KEY, "0");
+		remWordFontSize = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_SIZE_KEY, 2);
+		remDesFontSize = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_SIZE_KEY, 1);
+		remWordFontColor = Integer.parseInt(remWordFontColorString, 16) | 0xff000000;
+		remDesFontColor = Integer.parseInt(remDesFontColorString, 16) | 0xff000000;
 		toRightAction = Integer.parseInt(toRightActionString);
 		toLeftAction = Integer.parseInt(toLeftActionString);
 		toUpAction = Integer.parseInt(toUpActionSting);
@@ -146,16 +148,16 @@ public class RememberFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 //		Log.v("Fragment", "onactivitycreate");
 		rem_word_show = (TextView)(getView().findViewById(R.id.rem_word_show));
-		rew_des_show = (TextView)(getView().findViewById(R.id.rem_des_show));
+		rem_des_show_des_show = (TextView)(getView().findViewById(R.id.rem_des_show));
 		rem_query_image = (ImageView)(getView().findViewById(R.id.rem_query_image));
-		rew_des_show.setLongClickable(true);
+		rem_des_show_des_show.setLongClickable(true);
 		
 //		rem_word_show.setText(words[0].spelling);
 		MyGestureDetector myGestureDetector = new MyGestureDetector();
 		gestureDetector = new GestureDetector(getActivity(), myGestureDetector);
 		
 		//解释区触摸事件监听
-		rew_des_show.setOnTouchListener(new OnTouchListener() {
+		rem_des_show_des_show.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View arg0, MotionEvent event) {
@@ -172,7 +174,7 @@ public class RememberFragment extends Fragment {
 //				Log.v("imageview", "OK");
 				rem_query_image.setEnabled(false);
 				rem_query_image.setVisibility(View.GONE);
-				rew_des_show.setText(words[wordcount].explanation);
+				rem_des_show_des_show.setText(words[wordcount].explanation);
 			}
 		});
 		
@@ -298,7 +300,7 @@ public class RememberFragment extends Fragment {
 				rem_query_image.setEnabled(true);
 				rem_query_image.setVisibility(View.VISIBLE);
 				rem_word_show.setText(words[wordcount].spelling);
-				rew_des_show.setText("");
+				rem_des_show_des_show.setText("");
 			}
 			break;
 		case 2:
@@ -310,7 +312,7 @@ public class RememberFragment extends Fragment {
 				rem_query_image.setEnabled(true);
 				rem_query_image.setVisibility(View.VISIBLE);
 				rem_word_show.setText(words[wordcount].spelling);
-				rew_des_show.setText("");
+				rem_des_show_des_show.setText("");
 			}
 			break;
 		case 3:
@@ -341,11 +343,11 @@ public class RememberFragment extends Fragment {
 						wordcount = words.length-1;
 						
 						rem_word_show.setText(words[wordcount].spelling);
-						rew_des_show.setText("");
+						rem_des_show_des_show.setText("");
 					}
 					if (words == null) {
 						rem_word_show.setText("");
-						rew_des_show.setText("");
+						rem_des_show_des_show.setText("");
 						new NoWordDialogFragment().show(getFragmentManager(), null);
 					}
 				}
@@ -459,7 +461,7 @@ public class RememberFragment extends Fragment {
 							new NoWordDialogFragment().show(getFragmentManager(), null);
 						} else {
 							rem_word_show.setText(words[wordcount].spelling);
-							rew_des_show.setText("");
+							rem_des_show_des_show.setText("");
 						}
 						
 //						db.close();
