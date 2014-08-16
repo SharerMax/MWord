@@ -2,10 +2,12 @@ package net.sharermax.mword;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
+import android.R.anim;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,11 +17,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends Activity {
 
@@ -61,7 +66,16 @@ public class MainActivity extends Activity {
 		getFragmentManager().beginTransaction().replace(R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-//		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+		if (android.os.Build.VERSION.SDK_INT > 18) {
+			Window window = getWindow();
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setNavigationBarTintEnabled(true);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setTintColor(Color.parseColor("#ff009688"));
+		}
+		
 	}
 	
 	public TranslateFragment getTranslateFragment() {
@@ -92,6 +106,11 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
+		
+		if (slidingMenu.isMenuShowing()) {
+			slidingMenu.toggle();
+		}
+
 		switch (item.getItemId()) {
 		case R.id.action_switching:
 			if(currentFragment) {

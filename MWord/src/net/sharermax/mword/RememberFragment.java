@@ -127,16 +127,19 @@ public class RememberFragment extends Fragment {
 
 	public void readConfig() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String remWordFontColorString = sharedPreferences.getString(PreferenceKey.REM_WORD_FONT_COLOR_KEY, "#000000").substring(1);
-		String remDesFontColorString = sharedPreferences.getString(PreferenceKey.REM_DES_FONT_COLOR_KEY, "#000000").substring(1);
+//		String remWordFontColorString = sharedPreferences.getString(PreferenceKey.REM_WORD_FONT_COLOR_KEY, "#000000").substring(1);
+		
+//		String remDesFontColorString = sharedPreferences.getString(PreferenceKey.REM_DES_FONT_COLOR_KEY, "#000000").substring(1);
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TORIGHT_KEY, "1");
 		String toLeftActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TOLEFT_KEY, "2");
 		String toUpActionSting = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TOUP_KEY, "0");
 		String toDownActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TODOWN_KEY, "0");
 		remWordFontSize = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_SIZE_KEY, 2);
 		remDesFontSize = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_SIZE_KEY, 1);
-		remWordFontColor = Integer.parseInt(remWordFontColorString, 16) | 0xff000000;
-		remDesFontColor = Integer.parseInt(remDesFontColorString, 16) | 0xff000000;
+//		remWordFontColor = Integer.parseInt(remWordFontColorString, 16) | 0xff000000;
+		remWordFontColor = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_COLOR_KEY, 0xff000000);
+//		remDesFontColor = Integer.parseInt(remDesFontColorString, 16) | 0xff000000;
+		remDesFontColor = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_COLOR_KEY, 0xff000000);
 		toRightAction = Integer.parseInt(toRightActionString);
 		toLeftAction = Integer.parseInt(toLeftActionString);
 		toUpAction = Integer.parseInt(toUpActionSting);
@@ -210,6 +213,7 @@ public class RememberFragment extends Fragment {
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
+		wordcount = 0;
 		super.onStop();
 //		Log.v("Fragment", "onstop");
 		dbAdapter.close();

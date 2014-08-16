@@ -3,14 +3,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -24,6 +30,19 @@ public class AboutActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about);
+		
+		if (android.os.Build.VERSION.SDK_INT > 18) {
+			Window window = getWindow();
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setNavigationBarTintEnabled(true);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setTintColor(Color.parseColor("#ff009688"));
+			SystemBarConfig systemBarConfig = tintManager.getConfig();
+			findViewById(R.id.about_listview).setPadding(0, systemBarConfig.getPixelInsetTop(getActionBar().isShowing()), 0, systemBarConfig.getPixelInsetBottom());
+		}
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		listView = (ListView)findViewById(R.id.about_listview);
 //		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getData());

@@ -202,6 +202,8 @@ public class TranslateFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onStop();
 //		Log.v("translate", "stop");
+		setEditTextLostFocus();
+		hideKeyboard();
 		dbAdapter.close();
 		dbAdapter = null;
 	}

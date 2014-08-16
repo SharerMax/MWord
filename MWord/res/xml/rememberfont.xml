@@ -12,15 +12,11 @@
             android:defaultValue="2"
             android:positiveButtonText="@string/dialog_ok"
             android:negativeButtonText="@string/dialog_cancel"/>
-        <ListPreference
+        <com.chiralcode.colorpicker.ColorPickerPreference
             android:key="rem_word_font_color_key"
             android:title="@string/word_font_color"
-            android:dialogTitle="@string/word_font_color"
-            android:entries="@array/rem_fontcolor_entry"
-            android:entryValues="@array/rem_fontcolor_entryvalue"
             android:summary="@string/set_rem_word_font_color_summary"
-            android:defaultValue="#000000"
-            android:negativeButtonText="@string/dialog_cancel"/>
+            android:defaultValue="0xff000000"/>
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/setting_des_font_remember">
@@ -33,15 +29,11 @@
             android:defaultValue="1"
             android:positiveButtonText="@string/dialog_ok"
             android:negativeButtonText="@string/dialog_cancel"/>
-        <ListPreference
+        <com.chiralcode.colorpicker.ColorPickerPreference
             android:key="rem_des_font_color_key"
             android:title="@string/des_font_color"
-            android:dialogTitle="@string/des_font_color"
-            android:entries="@array/rem_fontcolor_entry"
-            android:entryValues="@array/rem_fontcolor_entryvalue"
             android:summary="@string/set_rem_des_font_color_summary"
-            android:defaultValue="#000000"
-            android:negativeButtonText="@string/dialog_cancel"/>
+            android:defaultValue="0xff000000"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

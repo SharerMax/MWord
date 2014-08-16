@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.sharermax.mword"
-    android:versionCode="15"
+    android:versionCode="18"
     android:versionName="1.0.3(Beta)" >
 
     <uses-sdk
@@ -16,7 +16,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyTheme">
+        android:theme="@style/MyMainTheme">
         <activity
             android:name="net.sharermax.mword.MainActivity"
             android:label="@string/app_name"
@@ -30,12 +30,12 @@
         <activity 
             android:name="net.sharermax.mword.AboutActivity"
             android:label="@string/app_about"
-            android:theme="@style/AppTheme"
+            android:theme="@style/MySecondTheme"
             android:parentActivityName="net.sharermax.mword.MainActivity">
         </activity>
         <activity 
             android:name="net.sharermax.mword.BasicSettingActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/MySecondTheme"
             android:parentActivityName="net.sharermax.mword.MainActivity">
             
         </activity>
