@@ -1,10 +1,11 @@
 
-package me.imid.swipebacklayout.lib;
+package me.imid.swipebacklayout;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
@@ -153,6 +154,7 @@ public class SwipeBackLayout extends FrameLayout {
         setShadow(shadowRight, EDGE_RIGHT);
         setShadow(shadowBottom, EDGE_BOTTOM);
         a.recycle();
+        //屏幕密度  当dpi(每英寸像素数)为160时 1d(i)p = 1px; desity(密度比) = 1f; 
         final float density = getResources().getDisplayMetrics().density;
         final float minVel = MIN_FLING_VELOCITY * density;
         mDragHelper.setMinVelocity(minVel);
@@ -165,6 +167,7 @@ public class SwipeBackLayout extends FrameLayout {
      * @param sensitivity value between 0 and 1, the final value for touchSlop =
      *            ViewConfiguration.getScaledTouchSlop * (1 / s);
      */
+    //灵敏度（sensitivity）
     public void setSensitivity(Context context, float sensitivity) {
         mDragHelper.setSensitivity(context, sensitivity);
     }
@@ -209,7 +212,7 @@ public class SwipeBackLayout extends FrameLayout {
      */
     public void setScrimColor(int color) {
         mScrimColor = color;
-        invalidate();
+        invalidate(); //重绘View
     }
 
     /**
@@ -461,6 +464,7 @@ public class SwipeBackLayout extends FrameLayout {
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
         ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);
         decorChild.setBackgroundResource(background);
+//        decorChild.setBackgroundColor(Color.BLUE);
         decor.removeView(decorChild);
         addView(decorChild);
         setContentView(decorChild);

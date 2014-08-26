@@ -20,6 +20,7 @@ public class SlidingFragment extends PreferenceFragment {
 	private Preference remGesturePreference;
 	private ListPreference translateApi;
 	private Preference aboutPreference;
+	private Preference advancePreference;
 	
 	
 	@Override
@@ -32,6 +33,8 @@ public class SlidingFragment extends PreferenceFragment {
 		remGesturePreference = (Preference)findPreference(PreferenceKey.REM_SETTING_GESTURE_KEY);
 		translateApi = (ListPreference)findPreference(PreferenceKey.TRANSLATE_API_KEY);
 		aboutPreference = (Preference)findPreference(PreferenceKey.ABOUT_KEY);
+		advancePreference = (Preference)findPreference(PreferenceKey.ADVANCE_SETTING_KEY);
+		
 		
 		translateApi.setSummary(translateApi.getEntry());
 		
@@ -39,6 +42,7 @@ public class SlidingFragment extends PreferenceFragment {
 		remFontPreference.setOnPreferenceClickListener(slidingOnPreferenceClickListener);
 		remGesturePreference.setOnPreferenceClickListener(slidingOnPreferenceClickListener);
 		aboutPreference.setOnPreferenceClickListener(slidingOnPreferenceClickListener);
+		advancePreference.setOnPreferenceClickListener(slidingOnPreferenceClickListener);
 	}
 	
 	class SlidingOnPreferenceClickListener implements OnPreferenceClickListener {
@@ -61,6 +65,12 @@ public class SlidingFragment extends PreferenceFragment {
 			} else if (preferenceTitle.equals(getString(R.string.app_about))){
 				Intent intent = new Intent();
 				intent.setClass(getActivity(), AboutActivity.class);
+				startActivity(intent);
+				return true;
+			} else if (preferenceTitle.equals(getString(R.string.app_advance_setteing))) {
+				Intent intent = new Intent();
+				intent.putExtra("SlidingFragment", getString(R.string.app_advance_setteing));
+				intent.setClass(getActivity(), BasicSettingActivity.class);
 				startActivity(intent);
 				return true;
 			} else {

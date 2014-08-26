@@ -8,12 +8,14 @@ import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,22 +27,34 @@ import android.widget.SimpleAdapter;
 public class AboutActivity extends Activity {
 
 	private ListView listView;
+	private boolean mImmersionEnable;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about);
-		
-		if (android.os.Build.VERSION.SDK_INT > 18) {
+		SharedPreferences sharedPreferences = 
+				PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		if (android.os.Build.VERSION.SDK_INT > 18 &&
+				sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true)) {
+			mImmersionEnable = true;
 			Window window = getWindow();
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			window.setFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 			SystemBarTintManager tintManager = new SystemBarTintManager(this);
 			tintManager.setNavigationBarTintEnabled(true);
 			tintManager.setStatusBarTintEnabled(true);
 			tintManager.setTintColor(Color.parseColor("#ff009688"));
 			SystemBarConfig systemBarConfig = tintManager.getConfig();
-			findViewById(R.id.about_listview).setPadding(0, systemBarConfig.getPixelInsetTop(getActionBar().isShowing()), 0, systemBarConfig.getPixelInsetBottom());
+			findViewById(R.id.about_listview).setPadding(
+					0, systemBarConfig.getPixelInsetTop(getActionBar().isShowing()), 
+					0, systemBarConfig.getPixelInsetBottom());
+		} else {
+			mImmersionEnable = false;
 		}
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);

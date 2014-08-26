@@ -1,6 +1,6 @@
-package me.imid.swipebacklayout.lib.app;
+package me.imid.swipebacklayout.app;
 
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.SwipeBackLayout;
 /**
  * @author Yrom
  */

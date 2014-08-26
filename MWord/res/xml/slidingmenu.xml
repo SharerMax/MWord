@@ -25,7 +25,12 @@
             android:negativeButtonText="@string/dialog_cancel"/>
     </PreferenceCategory>
     <PreferenceCategory 
-        android:title="@string/app_about">
+        android:title="@string/app_other_setting">
+        <Preference 
+            android:title="@string/app_advance_setteing"
+            android:key="advence_setting_key"
+            android:summary="@string/app_advance_setteing"/>
+        	
         <Preference
             android:title="@string/app_about"
             android:key="about_key"

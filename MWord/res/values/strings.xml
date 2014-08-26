@@ -5,6 +5,7 @@
     <string name="app_exit">退出</string>
     <string name="dialog_ok">确认</string>
     <string name="dialog_cancel">取消</string>
+    <string name="app_other_setting">其它设置</string>
     <!-- MainActivity Action Bar with show-->
     <string name="action_switch">切换</string>
     <string name="action_settings">设置</string>
@@ -62,6 +63,14 @@
     <!-- Warning Message -->
     <string name="note">提示</string>
     <string name="no_word_message">未找到单词:(</string>
+    <!-- Adcance Setting -->
+    <string name="app_advance_setteing">高级设置</string>
+    <string name="swipeback">滑动返回</string>
+    <string name="swipeback_summary_on">滑动返回开启</string>
+    <string name="swipeback_summary_off">滑动返回关闭</string>
+    <string name="immersion">沉浸式</string>
+    <string name="immersion_summary_on">沉浸式开启（Android4.4 以上有效）</string>
+    <string name="immersion_summary_off">沉浸式关闭</string>
     <!-- About  -->
     <string name="app_about">关于</string>
     <string name="app_about_summary">应用信息</string>

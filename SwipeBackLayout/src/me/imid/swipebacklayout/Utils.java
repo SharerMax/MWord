@@ -1,5 +1,5 @@
 
-package me.imid.swipebacklayout.lib;
+package me.imid.swipebacklayout;
 
 import android.app.Activity;
 

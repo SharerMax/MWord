@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory 
+        android:title="@string/app_advance_setteing"
+        android:key="advance_setting">
+        <CheckBoxPreference 
+            android:title="@string/immersion"
+            android:key="immersion_key"
+            android:summaryOn="@string/immersion_summary_on"
+            android:summaryOff="@string/immersion_summary_off"
+            android:defaultValue="flase"/>
+        <CheckBoxPreference 
+            android:title="@string/swipeback"
+            android:key="swipe_back_key"
+            android:summaryOn="@string/swipeback_summary_on"
+            android:summaryOff="@string/swipeback_summary_off"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

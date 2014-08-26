@@ -100,8 +100,8 @@ public class RememberFragment extends Fragment {
 		super.onStart();
 //		Log.v("Fragment", "onstart");
 
-		readConfig();
-		applyConfig();
+		readConfigFromPreference();
+		applyConfigFromPreference();
 		
 		if (dbAdapter == null) {
 			dbAdapter = new DBAdapter(activity);
@@ -118,14 +118,14 @@ public class RememberFragment extends Fragment {
 		}
 	}
 
-	public void applyConfig() {
+	public void applyConfigFromPreference() {
 		rem_word_show.setTextColor(remWordFontColor);
 		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remWordFontSize +  1) * 10);
 		rem_des_show_des_show.setTextColor(remDesFontColor);
 		rem_des_show_des_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remDesFontSize +  1) * 10);
 	}
 
-	public void readConfig() {
+	public void readConfigFromPreference() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 //		String remWordFontColorString = sharedPreferences.getString(PreferenceKey.REM_WORD_FONT_COLOR_KEY, "#000000").substring(1);
 		

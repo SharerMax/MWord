@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.imid.swipebacklayout.lib;
+package me.imid.swipebacklayout;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

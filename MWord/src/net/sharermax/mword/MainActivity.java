@@ -2,17 +2,18 @@ package net.sharermax.mword;
 
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.xmlparse.XmlAdapter;
-import android.R.anim;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -39,6 +40,7 @@ public class MainActivity extends Activity {
 	private XmlAdapter xmlAdapter;
 	private String expotrpath;
 	private SlidingMenu slidingMenu;
+	private boolean mImmersionEnable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class MainActivity extends Activity {
 		
 		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
 		currentFragment = true;
+
 		slidingMenu = new SlidingMenu(this);
 		slidingMenu.setMode(SlidingMenu.LEFT);
 		slidingMenu.setFadeDegree(0.35f);
@@ -63,17 +66,27 @@ public class MainActivity extends Activity {
 		slidingMenu.setMenu(R.layout.menu);
 		slidingMenu.setOnClosedListener(new MenuClosedListener());
 		slidingMenu.setOnOpenListener(new MenuOpenListener());
-		getFragmentManager().beginTransaction().replace(R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
+		getFragmentManager().beginTransaction().replace(
+				R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		if (android.os.Build.VERSION.SDK_INT > 18) {
+		SharedPreferences sharedPreferences = 
+				PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		
+		if (android.os.Build.VERSION.SDK_INT > 18 &&
+				sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true)) {
+			mImmersionEnable = true;
 			Window window = getWindow();
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 			SystemBarTintManager tintManager = new SystemBarTintManager(this);
 			tintManager.setNavigationBarTintEnabled(true);
 			tintManager.setStatusBarTintEnabled(true);
 			tintManager.setTintColor(Color.parseColor("#ff009688"));
+		} else {
+			mImmersionEnable = false;
 		}
 		
 	}
@@ -87,6 +100,19 @@ public class MainActivity extends Activity {
 	public void setCurrentFragment(boolean flag) {
 		this.currentFragment = flag;
 	}
+	public SlidingMenu getSlidingMenu() {
+		return slidingMenu;
+	}
+	
+	private boolean hideSlidingMenu() {
+		// TODO Auto-generated method stub
+		if (slidingMenu != null && slidingMenu.isMenuShowing()) {
+			slidingMenu.toggle();
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
@@ -94,6 +120,15 @@ public class MainActivity extends Activity {
 		
 	}
 
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		hideSlidingMenu();
+	}
+
+	
 
 	//Option Menu
 	@Override
@@ -139,7 +174,7 @@ public class MainActivity extends Activity {
 			CreateExportProgressDialog();
 			return true;
 		case android.R.id.home:
-			Log.v("MainActivity", "home");
+//			Log.v("MainActivity", "home");
 			slidingMenu.toggle();
 		default:
 			break;
@@ -151,8 +186,7 @@ public class MainActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) { 
-			if (slidingMenu.isMenuShowing()) {
-				slidingMenu.toggle();
+			if (hideSlidingMenu()) {
 				return true;
 			}
 //			Log.v("MenuShowing", msg)
@@ -169,6 +203,8 @@ public class MainActivity extends Activity {
 			} 
 			return super.onKeyDown(keyCode, event); 
 	}
+	
+	
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode,
@@ -268,8 +304,8 @@ public class MainActivity extends Activity {
 		public void onClosed() {
 			// TODO Auto-generated method stub
 			if (currentFragment) {
-				rememberFragment.readConfig();
-				rememberFragment.applyConfig();
+				rememberFragment.readConfigFromPreference();
+				rememberFragment.applyConfigFromPreference();
 			}
 		}
 	}
