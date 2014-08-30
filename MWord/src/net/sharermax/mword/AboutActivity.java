@@ -2,10 +2,6 @@ package net.sharermax.mword;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig;
 
 public class AboutActivity extends Activity {
 

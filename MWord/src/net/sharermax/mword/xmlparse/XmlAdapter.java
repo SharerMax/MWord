@@ -13,16 +13,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
-
 import android.util.Xml;
-
 
 public class XmlAdapter {
 	

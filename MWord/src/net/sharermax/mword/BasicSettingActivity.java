@@ -2,22 +2,16 @@ package net.sharermax.mword;
 
 import me.imid.swipebacklayout.SwipeBackLayout;
 import me.imid.swipebacklayout.app.SwipeBackActivity;
-
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig;
-
-
-import android.R.bool;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig;
 
 public class BasicSettingActivity extends SwipeBackActivity {
 	private String title;

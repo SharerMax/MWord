@@ -1,10 +1,5 @@
 package net.sharermax.mword;
-/********************
- * 设置项 RememberFragment 字体设置项
- * author: SharerMax
- * create: 2014.05.30
- * modify: 2014.05.30
- */
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;

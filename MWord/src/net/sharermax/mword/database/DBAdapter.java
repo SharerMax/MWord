@@ -1,10 +1,4 @@
 package net.sharermax.mword.database;
-/********************
- * 数据库Adapter 
- * author: SharerMax
- * create: 2014.06.04
- * modify: 2014.06.04
- */
 
 import android.R.bool;
 import android.content.ContentValues;
@@ -47,7 +41,7 @@ public class DBAdapter {
 			// TODO: handle exception
 			dbDatabase = dbOpenHelper.getReadableDatabase();
 		}
-		mIsOpen = true;
+		mIsOpen = false;
 	}
 	
 	//close database
@@ -56,7 +50,7 @@ public class DBAdapter {
 			dbDatabase.close();
 			dbDatabase = null;
 		}
-		mIsOpen = false;
+		mIsOpen = true;
 	}
 	
 	public boolean isClose() {

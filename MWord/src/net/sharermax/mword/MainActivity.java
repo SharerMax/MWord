@@ -14,14 +14,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
@@ -34,7 +32,8 @@ public class MainActivity extends Activity {
 	private FragmentManager mFragmentManager;
 	private boolean mIsRememberFragment; //true : RememberFragment false:TranslateFragment
 	private long mExitTime;
-	private ProgressDialog mProgressDialog;
+	private ProgressDialog mExportProgressDialog;
+	private ProgressDialog mImportProgressDialog;
 	private DBAdapter mDBAdapter;
 	private Handler mHandler;
 	private XmlAdapter mXmlAdapter;
@@ -151,14 +150,10 @@ public class MainActivity extends Activity {
 			mIsRememberFragment = !mIsRememberFragment;
 			return true;
 		case R.id.action_import:
-			Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
-			fileselectintent.setType("*/*");
-			fileselectintent.addCategory(Intent.CATEGORY_OPENABLE);
-			//onActivityResult(...) method inside parent activity
-			startActivityForResult(fileselectintent,2);
+			importBack();
 			return true;
 		case R.id.action_export:
-			CreateExportProgressDialog();
+			exportBack();
 			return true;
 		case android.R.id.home:
 			mSlidingMenu.toggle();
@@ -166,6 +161,40 @@ public class MainActivity extends Activity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void exportBack() {
+		if (mDBAdapter == null || mDBAdapter.isClose()) {
+			mDBAdapter = new DBAdapter(MainActivity.this);
+			mDBAdapter.open();
+		}
+		//导出进度Dialog
+		if (mExportProgressDialog == null) {
+			mExportProgressDialog = ProgressDialog.show(this, "导出", null);
+		}
+		mExportProgressDialog.setCanceledOnTouchOutside(false);
+		mExportProgressDialog.setCancelable(false);
+		
+		//检查SD卡是否存在，并生成导出路径
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			mExpotrpath = Environment.getExternalStorageDirectory().getPath() + "/MWord/Backup";
+			if (mXmlAdapter == null) {
+				mXmlAdapter = new XmlAdapter();
+			}
+			mHandler = new MyHandler();
+			Thread thread = new ExpotrThread();
+			thread.start();
+		} else {
+			Toast.makeText(MainActivity.this, "SD卡不存在 :( ", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void importBack() {
+		Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
+		fileselectintent.setType("*/*");
+		fileselectintent.addCategory(Intent.CATEGORY_OPENABLE);
+		//onActivityResult(...) method inside parent activity
+		startActivityForResult(fileselectintent,2);
 	}
 	//2s内两次点击返回键退出程序
 	@Override
@@ -196,16 +225,24 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		// requestcode = 1 来着RememberFragment的文件选择
 		// requestcode = 2 来着ActionBar的文件选择
+		
 		switch (requestCode) {
 		case 1:
 			mRememberFragment.onActivityResult(requestCode, resultCode, data);
 			break;
 		case 2:
-			if (data != null) {
+			if (data != null) {				
 				Uri uri = data.getData();
 				final String filename = uri.getPath();
 				final XmlAdapter xmlAdapter = new XmlAdapter();
 				final DBAdapter db = new DBAdapter(MainActivity.this);
+				
+				if (mImportProgressDialog == null) {
+					mImportProgressDialog = ProgressDialog.show(this, "导入", null);
+				}
+				mImportProgressDialog.setCanceledOnTouchOutside(false);
+				mImportProgressDialog.setCancelable(false);
+				
 				final Handler handler = new Handler() {
 	
 					@Override
@@ -213,8 +250,8 @@ public class MainActivity extends Activity {
 						// TODO Auto-generated method stub
 						Toast.makeText(MainActivity.this, "导入单词数:" + msg.arg1, Toast.LENGTH_LONG).show();
 						db.close();
+						mImportProgressDialog.dismiss();
 					}
-					
 				};
 				new Thread() {
 	
@@ -235,27 +272,6 @@ public class MainActivity extends Activity {
 		}
 		
 	}
-	//导出进度Dialog
-	private void CreateExportProgressDialog() {
-		mProgressDialog = ProgressDialog.show(this, "导出", null);
-		mProgressDialog.setCanceledOnTouchOutside(false);
-		if (mDBAdapter == null || mDBAdapter.isClose()) {
-			mDBAdapter = new DBAdapter(MainActivity.this);
-			mDBAdapter.open();
-		}
-		
-		//检查SD卡是否存在，并生成导出路径
-		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			mExpotrpath = Environment.getExternalStorageDirectory().getPath() + "/MWord/Backup";
-			mXmlAdapter = new XmlAdapter();
-			mHandler = new MyHandler();
-			Thread thread = new ExpotrThread();
-			thread.start();
-		} else {
-			Toast.makeText(MainActivity.this, "SD卡不存在 :( ", Toast.LENGTH_LONG).show();
-		}
-		
-	}
 	
 	class ExpotrThread extends Thread {
 
@@ -263,7 +279,7 @@ public class MainActivity extends Activity {
 		public void run() {
 			// TODO Auto-generated method stub
 			Message msg = mHandler.obtainMessage();
-			msg.what = mXmlAdapter.xmlExport(mDBAdapter, mExpotrpath);
+			msg.arg1 = mXmlAdapter.xmlExport(mDBAdapter, mExpotrpath);
 			mHandler.sendMessage(msg);
 		}
 		
@@ -274,8 +290,8 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			mDBAdapter.close();
-			mProgressDialog.dismiss();
-			Toast.makeText(MainActivity.this, "导出单词数:" + msg.what, Toast.LENGTH_LONG).show();
+			mExportProgressDialog.dismiss();
+			Toast.makeText(MainActivity.this, "导出单词数:" + msg.arg1, Toast.LENGTH_LONG).show();
 			
 		}
 		

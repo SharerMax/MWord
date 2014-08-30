@@ -11,6 +11,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,6 +54,8 @@ public class RememberFragment extends Fragment {
 	private int mRemDesFontSize;
 	private int mRemDesFontColor;
 	private static MainActivity activity;
+	private ProgressDialog mImportProgressDialog;
+	private boolean mImportOver = true;
 	
 	public RememberFragment() {
 		// TODO Auto-generated constructor stub
@@ -85,15 +88,18 @@ public class RememberFragment extends Fragment {
 		if (dbAdapter == null || dbAdapter.isClose()) {
 			dbAdapter = new DBAdapter(activity);
 			dbAdapter.open();
-			Log.v("REM_START", "null or close");
 		}
 		
 		mWords = dbAdapter.queryAllData();
 		// # bug : mWords is NULL
+		// fixed
 		
 		//无单词提示
-		if (mWords == null) {
-			new NoWordDialogFragment().show(getFragmentManager(), null);
+		if (mWords == null ) {
+			if (mImportOver) {
+				new NoWordDialogFragment().show(getFragmentManager(), null);
+			}
+			
 		} else {
 			rem_word_show.setText(mWords[0].spelling);
 		}
@@ -362,6 +368,13 @@ public class RememberFragment extends Fragment {
 					dbAdapter = new DBAdapter(activity);
 					dbAdapter.open();
 				}
+				
+				if (mImportProgressDialog == null) {
+					mImportProgressDialog = ProgressDialog.show(activity, "导入", null);
+				}
+				mImportProgressDialog.setCanceledOnTouchOutside(false);
+				mImportProgressDialog.setCancelable(false);
+				mImportOver = false;
 				final XmlAdapter xmlAdapter = new XmlAdapter();
 				
 				final Handler handler = new Handler() {
@@ -370,6 +383,8 @@ public class RememberFragment extends Fragment {
 					public void handleMessage(Message msg) {
 						// TODO Auto-generated method stub
 						Toast.makeText(getActivity(), "导入单词数:" + msg.what, Toast.LENGTH_LONG).show();
+						mImportProgressDialog.dismiss();
+						mImportOver = true;
 						mWords = dbAdapter.queryAllData();
 						Log.v("REM_IMPORT", "" + mWords.length);
 						if (mWords == null) {
@@ -379,6 +394,7 @@ public class RememberFragment extends Fragment {
 							rem_des_show_des_show.setText("");
 						}
 						dbAdapter.close();
+						
 					}
 					
 				};

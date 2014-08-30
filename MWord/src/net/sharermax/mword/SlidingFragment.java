@@ -1,10 +1,5 @@
 package net.sharermax.mword;
-/********************
- * 设置界面 SlidingFragment
- * author: SharerMax
- * create: 2014.05.30
- * modify: 2014.08.05
- */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;

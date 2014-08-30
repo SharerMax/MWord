@@ -1,10 +1,5 @@
 package net.sharermax.mword;
-/********************
- * 在线翻译主界面 TranslateFragment
- * author: SharerMax
- * create: 2014.05.29
- * modify: 2014.08.04
- */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,16 +8,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-
 import net.sharermax.mword.database.DBAdapter;
 import net.sharermax.mword.database.Word;
 import net.sharermax.mword.network.NetworkConnection;
-
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
