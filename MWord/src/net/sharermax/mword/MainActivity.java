@@ -29,43 +29,43 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends Activity {
 
-	private RememberFragment rememberFragment;
-	private TranslateFragment translateFragment;
-	private FragmentManager fragmentManager;
-	private boolean currentFragment; //true : RememberFragment false:TranslateFragment
-	private long exitTime;
-	private ProgressDialog progressDialog;
-	private DBAdapter dbAdapter;
-	private Handler handler;
-	private XmlAdapter xmlAdapter;
-	private String expotrpath;
-	private SlidingMenu slidingMenu;
+	private RememberFragment mRememberFragment;
+	private TranslateFragment mTranslateFragment;
+	private FragmentManager mFragmentManager;
+	private boolean mIsRememberFragment; //true : RememberFragment false:TranslateFragment
+	private long mExitTime;
+	private ProgressDialog mProgressDialog;
+	private DBAdapter mDBAdapter;
+	private Handler mHandler;
+	private XmlAdapter mXmlAdapter;
+	private String mExpotrpath;
+	private SlidingMenu mSlidingMenu;
 	private boolean mImmersionEnable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		rememberFragment = new RememberFragment();
-		translateFragment = new TranslateFragment();
+		mRememberFragment = new RememberFragment();
+		mTranslateFragment = new TranslateFragment();
 		
-		fragmentManager = getFragmentManager();
+		mFragmentManager = getFragmentManager();
 		
-		fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
-		currentFragment = true;
+		mFragmentManager.beginTransaction().replace(R.id.content, mRememberFragment).commit();
+		mIsRememberFragment = true;
 
-		slidingMenu = new SlidingMenu(this);
-		slidingMenu.setMode(SlidingMenu.LEFT);
-		slidingMenu.setFadeDegree(0.35f);
-		slidingMenu.setShadowDrawable(R.drawable.shadow);
-		slidingMenu.setShadowWidth(15);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-		slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		mSlidingMenu = new SlidingMenu(this);
+		mSlidingMenu.setMode(SlidingMenu.LEFT);
+		mSlidingMenu.setFadeDegree(0.35f);
+		mSlidingMenu.setShadowDrawable(R.drawable.shadow);
+		mSlidingMenu.setShadowWidth(15);
+		mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+		mSlidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 
-		slidingMenu.setMenu(R.layout.menu);
-		slidingMenu.setOnClosedListener(new MenuClosedListener());
-		slidingMenu.setOnOpenListener(new MenuOpenListener());
+		mSlidingMenu.setMenu(R.layout.menu);
+		mSlidingMenu.setOnClosedListener(new MenuClosedListener());
+		mSlidingMenu.setOnOpenListener(new MenuOpenListener());
 		getFragmentManager().beginTransaction().replace(
 				R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
 		
@@ -92,43 +92,33 @@ public class MainActivity extends Activity {
 	}
 	
 	public TranslateFragment getTranslateFragment() {
-		return translateFragment;
+		return mTranslateFragment;
 	}
 	public RememberFragment getRememberFragment() {
-		return rememberFragment;
+		return mRememberFragment;
 	}
 	public void setCurrentFragment(boolean flag) {
-		this.currentFragment = flag;
+		this.mIsRememberFragment = flag;
 	}
 	public SlidingMenu getSlidingMenu() {
-		return slidingMenu;
+		return mSlidingMenu;
 	}
 	
 	private boolean hideSlidingMenu() {
 		// TODO Auto-generated method stub
-		if (slidingMenu != null && slidingMenu.isMenuShowing()) {
-			slidingMenu.toggle();
+		if (mSlidingMenu != null && mSlidingMenu.isMenuShowing()) {
+			mSlidingMenu.toggle();
 			return true;
 		}
 		return false;
 	}
 	
 	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		
-	}
-
-
-	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
 		hideSlidingMenu();
 	}
-
-	
 
 	//Option Menu
 	@Override
@@ -142,40 +132,36 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		
-		if (slidingMenu.isMenuShowing()) {
-			slidingMenu.toggle();
+		if (mSlidingMenu.isMenuShowing()) {
+			mSlidingMenu.toggle();
 		}
 
 		switch (item.getItemId()) {
 		case R.id.action_switching:
-			if(currentFragment) {
+			if(mIsRememberFragment) {
 				//switch to Translate Fragment
- 				fragmentManager.beginTransaction().replace(R.id.content, translateFragment).commit();
+ 				mFragmentManager.beginTransaction().replace(R.id.content, mTranslateFragment).commit();
  				item.setIcon(R.drawable.translate_indicator);
 				
 			}else {
 				//switch to Remember Fragment
-				fragmentManager.beginTransaction().replace(R.id.content, rememberFragment).commit();
+				mFragmentManager.beginTransaction().replace(R.id.content, mRememberFragment).commit();
 				item.setIcon(R.drawable.remember_indicator);
 			}
-			currentFragment = !currentFragment;
+			mIsRememberFragment = !mIsRememberFragment;
 			return true;
 		case R.id.action_import:
-//			Log.v("oooooppppptttt", "importaction");
 			Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
 			fileselectintent.setType("*/*");
 			fileselectintent.addCategory(Intent.CATEGORY_OPENABLE);
-			//parent Activity start Activity，if I will get callback result need call
 			//onActivityResult(...) method inside parent activity
 			startActivityForResult(fileselectintent,2);
 			return true;
 		case R.id.action_export:
-//			Log.v("oooooppppptttt", "exportaction");
 			CreateExportProgressDialog();
 			return true;
 		case android.R.id.home:
-//			Log.v("MainActivity", "home");
-			slidingMenu.toggle();
+			mSlidingMenu.toggle();
 		default:
 			break;
 		}
@@ -189,15 +175,13 @@ public class MainActivity extends Activity {
 			if (hideSlidingMenu()) {
 				return true;
 			}
-//			Log.v("MenuShowing", msg)
-			if((System.currentTimeMillis()-exitTime) > 2000) { 
+			if((System.currentTimeMillis()-mExitTime) > 2000) { 
 				//Toast.LENGTH_SHORT 2s
 				//Toast.LENGTH_LONG 3.5s
 				Toast.makeText(MainActivity.this, "再次点击即退出应用", Toast.LENGTH_SHORT).show();
-				exitTime = System.currentTimeMillis(); 
+				mExitTime = System.currentTimeMillis(); 
 			} else { 
 				this.finish();
-//				System.exit(0); 
 			} 
 				return true; 
 			} 
@@ -214,35 +198,32 @@ public class MainActivity extends Activity {
 		// requestcode = 2 来着ActionBar的文件选择
 		switch (requestCode) {
 		case 1:
-			rememberFragment.onActivityResult(requestCode, resultCode, data);
+			mRememberFragment.onActivityResult(requestCode, resultCode, data);
 			break;
 		case 2:
-			if (data == null) {
-//				Log.v("FileSelect", "null");
-			} else {
+			if (data != null) {
 				Uri uri = data.getData();
 				final String filename = uri.getPath();
 				final XmlAdapter xmlAdapter = new XmlAdapter();
 				final DBAdapter db = new DBAdapter(MainActivity.this);
 				final Handler handler = new Handler() {
-
+	
 					@Override
 					public void handleMessage(Message msg) {
 						// TODO Auto-generated method stub
-						Toast.makeText(MainActivity.this, "导入单词数:" + msg.what, Toast.LENGTH_LONG).show();
-						db.close();			
+						Toast.makeText(MainActivity.this, "导入单词数:" + msg.arg1, Toast.LENGTH_LONG).show();
+						db.close();
 					}
 					
 				};
-				Log.v("FileSelect", filename);
 				new Thread() {
-
+	
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
 						db.open();
 						Message msg = handler.obtainMessage();
-						msg.what = xmlAdapter.xmlImport(db, filename);
+						msg.arg1 = xmlAdapter.xmlImport(db, filename);
 						handler.sendMessage(msg);
 					}
 					
@@ -256,16 +237,18 @@ public class MainActivity extends Activity {
 	}
 	//导出进度Dialog
 	private void CreateExportProgressDialog() {
-		progressDialog = ProgressDialog.show(this, "导出", null);
-		progressDialog.setCanceledOnTouchOutside(false);
-		dbAdapter = new DBAdapter(MainActivity.this);
-		dbAdapter.open();
-//		Log.v("createexport", Thread.currentThread().getName());
+		mProgressDialog = ProgressDialog.show(this, "导出", null);
+		mProgressDialog.setCanceledOnTouchOutside(false);
+		if (mDBAdapter == null || mDBAdapter.isClose()) {
+			mDBAdapter = new DBAdapter(MainActivity.this);
+			mDBAdapter.open();
+		}
+		
 		//检查SD卡是否存在，并生成导出路径
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			expotrpath = Environment.getExternalStorageDirectory().getPath() + "/MWord/Backup";
-			xmlAdapter = new XmlAdapter();
-			handler = new MyHandler();
+			mExpotrpath = Environment.getExternalStorageDirectory().getPath() + "/MWord/Backup";
+			mXmlAdapter = new XmlAdapter();
+			mHandler = new MyHandler();
 			Thread thread = new ExpotrThread();
 			thread.start();
 		} else {
@@ -279,9 +262,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			Message msg = handler.obtainMessage();
-			msg.what = xmlAdapter.xmlExport(dbAdapter, expotrpath);
-			handler.sendMessage(msg);
+			Message msg = mHandler.obtainMessage();
+			msg.what = mXmlAdapter.xmlExport(mDBAdapter, mExpotrpath);
+			mHandler.sendMessage(msg);
 		}
 		
 	}
@@ -290,9 +273,8 @@ public class MainActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-//			Log.v("handle", "handlemessage " + Thread.currentThread().getName());
-			dbAdapter.close();
-			progressDialog.dismiss();
+			mDBAdapter.close();
+			mProgressDialog.dismiss();
 			Toast.makeText(MainActivity.this, "导出单词数:" + msg.what, Toast.LENGTH_LONG).show();
 			
 		}
@@ -303,9 +285,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void onClosed() {
 			// TODO Auto-generated method stub
-			if (currentFragment) {
-				rememberFragment.readConfigFromPreference();
-				rememberFragment.applyConfigFromPreference();
+			if (mIsRememberFragment) {
+				mRememberFragment.readConfigFromPreference();
+				mRememberFragment.applyConfigFromPreference();
 			}
 		}
 	}
@@ -314,9 +296,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void onOpen() {
 			// TODO Auto-generated method stub
-			if (!currentFragment) {
-				translateFragment.setEditTextLostFocus();
-				translateFragment.hideKeyboard();
+			if (!mIsRememberFragment) {
+				mTranslateFragment.setEditTextLostFocus();
+				mTranslateFragment.hideKeyboard();
 			}
 		}
 	}

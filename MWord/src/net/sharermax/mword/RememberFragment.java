@@ -46,100 +46,77 @@ public class RememberFragment extends Fragment {
 	private int toUpAction;
 	private int toDownAction;
 	private DBAdapter dbAdapter = null;
-	private Word words[];
-	private int wordcount = 0;
-	private int remWordFontSize;
-	private int remWordFontColor;
-	private int remDesFontSize;
-	private int remDesFontColor;
+	private Word mWords[];
+	private int mWordCount = 0;
+	private int mRemWordFontSize;
+	private int mRemWordFontColor;
+	private int mRemDesFontSize;
+	private int mRemDesFontColor;
 	private static MainActivity activity;
 	
 	public RememberFragment() {
 		// TODO Auto-generated constructor stub
 	}
 	
-//	public RememberFragment(MainActivity activity) {
-//		// TODO Auto-generated constructor stub
-//		this.activity = activity;
-//	}
-	//Activity 与 Fragment 建立联系时 call
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 		if (activity instanceof MainActivity) {
 			this.activity = (MainActivity)activity;
-//			Log.v("Fragment", "MainActivity");
 		}
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-//		dbAdapter = new DBAdapter(getActivity());
-//		if (dbAdapter == null) {
-//			dbAdapter = new DBAdapter(activity);
-//			dbAdapter.open();
-//		}
-//		words = dbAdapter.queryAllData();
-//		Log.v("Fragment", "oncreate");
-	}
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-//		Log.v("Fragment", "oncreateview");
 		
-//		Log.v("wordsnumber", "" + wordcount);
 		return inflater.inflate(R.layout.remember_layout, container, false);
 	}
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-//		Log.v("Fragment", "onstart");
 
 		readConfigFromPreference();
 		applyConfigFromPreference();
 		
-		if (dbAdapter == null) {
+		if (dbAdapter == null || dbAdapter.isClose()) {
 			dbAdapter = new DBAdapter(activity);
 			dbAdapter.open();
+			Log.v("REM_START", "null or close");
 		}
-		words = dbAdapter.queryAllData();
 		
-//		rem_word_show.setText(words[0].spelling);
+		mWords = dbAdapter.queryAllData();
+		// # bug : mWords is NULL
+		
 		//无单词提示
-		if (words == null) {
+		if (mWords == null) {
 			new NoWordDialogFragment().show(getFragmentManager(), null);
 		} else {
-			rem_word_show.setText(words[0].spelling);
+			rem_word_show.setText(mWords[0].spelling);
 		}
 	}
 
 	public void applyConfigFromPreference() {
-		rem_word_show.setTextColor(remWordFontColor);
-		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remWordFontSize +  1) * 10);
-		rem_des_show_des_show.setTextColor(remDesFontColor);
-		rem_des_show_des_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (remDesFontSize +  1) * 10);
+		rem_word_show.setTextColor(mRemWordFontColor);
+		rem_word_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mRemWordFontSize +  1) * 10);
+		rem_des_show_des_show.setTextColor(mRemDesFontColor);
+		rem_des_show_des_show.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mRemDesFontSize +  1) * 10);
 	}
 
 	public void readConfigFromPreference() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//		String remWordFontColorString = sharedPreferences.getString(PreferenceKey.REM_WORD_FONT_COLOR_KEY, "#000000").substring(1);
 		
-//		String remDesFontColorString = sharedPreferences.getString(PreferenceKey.REM_DES_FONT_COLOR_KEY, "#000000").substring(1);
 		String toRightActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TORIGHT_KEY, "1");
 		String toLeftActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TOLEFT_KEY, "2");
 		String toUpActionSting = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TOUP_KEY, "0");
 		String toDownActionString = sharedPreferences.getString(PreferenceKey.REM_GESTURE_TODOWN_KEY, "0");
-		remWordFontSize = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_SIZE_KEY, 2);
-		remDesFontSize = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_SIZE_KEY, 1);
-//		remWordFontColor = Integer.parseInt(remWordFontColorString, 16) | 0xff000000;
-		remWordFontColor = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_COLOR_KEY, 0xff000000);
-//		remDesFontColor = Integer.parseInt(remDesFontColorString, 16) | 0xff000000;
-		remDesFontColor = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_COLOR_KEY, 0xff000000);
+		mRemWordFontSize = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_SIZE_KEY, 2);
+		mRemDesFontSize = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_SIZE_KEY, 1);
+		mRemWordFontColor = sharedPreferences.getInt(PreferenceKey.REM_WORD_FONT_COLOR_KEY, 0xff000000);
+		mRemDesFontColor = sharedPreferences.getInt(PreferenceKey.REM_DES_FONT_COLOR_KEY, 0xff000000);
 		toRightAction = Integer.parseInt(toRightActionString);
 		toLeftAction = Integer.parseInt(toLeftActionString);
 		toUpAction = Integer.parseInt(toUpActionSting);
@@ -149,13 +126,11 @@ public class RememberFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-//		Log.v("Fragment", "onactivitycreate");
 		rem_word_show = (TextView)(getView().findViewById(R.id.rem_word_show));
 		rem_des_show_des_show = (TextView)(getView().findViewById(R.id.rem_des_show));
 		rem_query_image = (ImageView)(getView().findViewById(R.id.rem_query_image));
 		rem_des_show_des_show.setLongClickable(true);
 		
-//		rem_word_show.setText(words[0].spelling);
 		MyGestureDetector myGestureDetector = new MyGestureDetector();
 		gestureDetector = new GestureDetector(getActivity(), myGestureDetector);
 		
@@ -174,61 +149,22 @@ public class RememberFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-//				Log.v("imageview", "OK");
 				rem_query_image.setEnabled(false);
 				rem_query_image.setVisibility(View.GONE);
-				rem_des_show_des_show.setText(words[wordcount].explanation);
+				rem_des_show_des_show.setText(mWords[mWordCount].explanation);
 			}
 		});
-		
 	}
 	
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-//		if (dbAdapter == null) {
-//			Log.v("Fragment", "onpause null");
-//		}
-//		Log.v("Fragment", "onpause");
-//		dbAdapter.close();
-	}
-	
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-//		Log.v("Fragment", "onresume1");
-		
-//		if (words == null) {
-//			new NoWordDialogFragment().show(getFragmentManager(), null);
-//			Log.v("Fragment", "null");
-//		} else {
-//			rem_word_show.setText(words[0].spelling);
-//			Log.v("Fragment", "spelling" + words.length);
-//		}
-//		Log.v("Fragment", "onresume2");
-	}
-
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
-		wordcount = 0;
+		mWordCount = 0;
 		super.onStop();
-//		Log.v("Fragment", "onstop");
 		dbAdapter.close();
 		dbAdapter = null;
 	}
 	
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-//		Log.v("fragment", "destory");
-		super.onDestroy();
-	}
-
-
 	//Gesture 识别 
 	public class MyGestureDetector  extends SimpleOnGestureListener{
 
@@ -243,21 +179,12 @@ public class RememberFragment extends Fragment {
 				float velocityY) {
 			// TODO Auto-generated method stub
 			if ((event1.getX() - event2.getX() > 100) && (Math.abs(velocityX) > 150)) {
-//				Log.v("touchevent", "to left");
-				
-//				rem_query_image.setEnabled(true);
-//				rem_query_image.setVisibility(View.VISIBLE);
 				gestureAction(toLeftAction);
 			} else if ((event2.getX() - event1.getX() > 100) && (Math.abs(velocityX) > 150)){
-//				rem_query_image.setEnabled(true);
-//				rem_query_image.setVisibility(View.VISIBLE);
-//				Log.v("touchevent", "to right");
 				gestureAction(toRightAction);
 			} else if ((event1.getY() - event2.getY() > 100) && (Math.abs(velocityY) > 150)) {
-//				Log.v("touchevent", "to up");
 				gestureAction(toUpAction);
 			} else if((event2.getY() - event1.getY() > 100) && (Math.abs(velocityY) > 150)) {
-//				Log.v("touchevent", "to down");
 				gestureAction(toDownAction);
 			}
 			return true;
@@ -293,37 +220,33 @@ public class RememberFragment extends Fragment {
 		String TAG = "GestureAction";
 		switch (action) {
 		case 0:
-//			Log.v(TAG, "NULL");
 			break;
 		case 1:
-//			Log.v(TAG, "Previous");
-			if (wordcount == 0) {
+			if (mWordCount == 0) {
 				Toast.makeText(getActivity(), getString(R.string.first_word_info), Toast.LENGTH_SHORT).show();
 			} else {
-				wordcount--;
+				mWordCount--;
 				rem_query_image.setEnabled(true);
 				rem_query_image.setVisibility(View.VISIBLE);
-				rem_word_show.setText(words[wordcount].spelling);
+				rem_word_show.setText(mWords[mWordCount].spelling);
 				rem_des_show_des_show.setText("");
 			}
 			break;
 		case 2:
-			Log.v(TAG, "Next "+ (words.length - 1));
-			if (wordcount == (words.length - 1)) {
+			Log.v(TAG, "Next "+ (mWords.length - 1));
+			if (mWordCount == (mWords.length - 1)) {
 				Toast.makeText(getActivity(), getString(R.string.final_word_info), Toast.LENGTH_SHORT).show();
 			} else {
-				wordcount++;
+				mWordCount++;
 				rem_query_image.setEnabled(true);
 				rem_query_image.setVisibility(View.VISIBLE);
-				rem_word_show.setText(words[wordcount].spelling);
+				rem_word_show.setText(mWords[mWordCount].spelling);
 				rem_des_show_des_show.setText("");
 			}
 			break;
 		case 3:
-//			Log.v(TAG, "New");	
 			break;
 		case 4:
-//			Log.v(TAG, "Delete");
 			AlertDialog.Builder builder = new Builder(getActivity());
 			builder.setTitle("删除？");
 			builder.setMessage("你确定要删除这个单词？");
@@ -332,24 +255,18 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-//					Log.v("gestureAction", "delete_ok");
-//					if (dbAdapter == null) {
-//						Log.v("delete",""+ words[wordcount]._id);
-//					}
-//					Log.v("delete",""+ words[wordcount]._id);
-					dbAdapter.deleteOneData(words[wordcount]._id);
+					dbAdapter.deleteOneData(mWords[mWordCount]._id);
 					Toast.makeText(getActivity(), "删除成功 :) ", Toast.LENGTH_SHORT).show();
-//					getFragmentManager().beginTransaction().replace(R.id.content, new RememberFragment(activity)).commit();
 					rem_query_image.setEnabled(true);
 					rem_query_image.setVisibility(View.VISIBLE);
-					words = dbAdapter.queryAllData();
-					if ((wordcount != 0) && (wordcount >= words.length)) {
-						wordcount = words.length-1;
+					mWords = dbAdapter.queryAllData();
+					if ((mWordCount != 0) && (mWordCount >= mWords.length)) {
+						mWordCount = mWords.length-1;
 						
-						rem_word_show.setText(words[wordcount].spelling);
+						rem_word_show.setText(mWords[mWordCount].spelling);
 						rem_des_show_des_show.setText("");
 					}
-					if (words == null) {
+					if (mWords == null) {
 						rem_word_show.setText("");
 						rem_des_show_des_show.setText("");
 						new NoWordDialogFragment().show(getFragmentManager(), null);
@@ -360,7 +277,6 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-//					Log.v("gestureAction", "delete_cancel");
 				}
 			});
 			Dialog dialog = builder.create();
@@ -386,7 +302,6 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-//					Log.v("Dialog", ""+arg1);
 					getActivity().finish();
 				}
 			});
@@ -396,7 +311,6 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-//					Log.v("Dialog", ""+arg1);
 					getFragmentManager().beginTransaction().replace(R.id.content, activity.getTranslateFragment()).commit();
 					activity.setCurrentFragment(false);
 				}
@@ -407,11 +321,9 @@ public class RememberFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-//					Log.v("Dialog", ""+arg1);
 					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 					intent.setType("*/*");
 					intent.addCategory(Intent.CATEGORY_OPENABLE);
-					//parent Activity start Activity，if I will get callback result need call
 					//onActivityResult(...) method inside parent activity
 					getActivity().startActivityForResult(intent,1);
 				}
@@ -435,20 +347,18 @@ public class RememberFragment extends Fragment {
 			Intent data) {
 		// TODO Auto-generated method stub
 		
-		Log.v("result", ""+requestCode);
+//		Log.v("result", ""+requestCode);
 		if (requestCode == 1) {	
 			//click cancel of chooser
 			if (data == null) {
-				Log.v("FileSelect", "null");
-//				getFragmentManager().beginTransaction().replace(R.id.content, activity.getRememberFragment()).commit();
-				if (words == null) {
+				Toast.makeText(getActivity(), "无单词导入", Toast.LENGTH_SHORT).show();
+				if (mWords == null) {
 					new NoWordDialogFragment().show(getFragmentManager(), null);
 				}	
 			} else {
 				Uri uri = data.getData();
 				final String filename = uri.getPath();
-//				String filename = uri.toString().substring(uri.toString().lastIndexOf("/")+1);
-				if (dbAdapter == null) {
+				if (dbAdapter == null || dbAdapter.isClose()) {
 					dbAdapter = new DBAdapter(activity);
 					dbAdapter.open();
 				}
@@ -460,30 +370,25 @@ public class RememberFragment extends Fragment {
 					public void handleMessage(Message msg) {
 						// TODO Auto-generated method stub
 						Toast.makeText(getActivity(), "导入单词数:" + msg.what, Toast.LENGTH_LONG).show();
-						words = dbAdapter.queryAllData();
-						if (words == null) {
+						mWords = dbAdapter.queryAllData();
+						Log.v("REM_IMPORT", "" + mWords.length);
+						if (mWords == null) {
 							new NoWordDialogFragment().show(getFragmentManager(), null);
 						} else {
-							rem_word_show.setText(words[wordcount].spelling);
+							rem_word_show.setText(mWords[mWordCount].spelling);
 							rem_des_show_des_show.setText("");
 						}
-						
-//						db.close();
-//						getFragmentManager().beginTransaction().replace(R.id.content, activity.getRememberFragment()).commit();
-						
+						dbAdapter.close();
 					}
 					
 				};
-//				Log.v("FileSelect", filename);
 				new Thread() {
 
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-//						db.open();
 						Message msg = handler.obtainMessage();
 						msg.what = xmlAdapter.xmlImport(dbAdapter, filename);
-//						Log.v("xmlimport", "TTT");
 						handler.sendMessage(msg);
 					}
 					

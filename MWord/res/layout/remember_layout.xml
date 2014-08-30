@@ -31,6 +31,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:gravity="center"
         android:background="#ffffff"/>
         <ImageView 
             android:id="@+id/rem_query_image"

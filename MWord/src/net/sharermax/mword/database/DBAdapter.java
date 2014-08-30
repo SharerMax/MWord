@@ -6,6 +6,7 @@ package net.sharermax.mword.database;
  * modify: 2014.06.04
  */
 
+import android.R.bool;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -29,6 +30,7 @@ public class DBAdapter {
 	private Context context;
 	private SQLiteDatabase dbDatabase;
 	private MySQLiteOpenHelper dbOpenHelper;
+	private boolean mIsOpen;
 	
 
 	public DBAdapter(Context _context) {
@@ -45,6 +47,7 @@ public class DBAdapter {
 			// TODO: handle exception
 			dbDatabase = dbOpenHelper.getReadableDatabase();
 		}
+		mIsOpen = true;
 	}
 	
 	//close database
@@ -53,6 +56,11 @@ public class DBAdapter {
 			dbDatabase.close();
 			dbDatabase = null;
 		}
+		mIsOpen = false;
+	}
+	
+	public boolean isClose() {
+		return mIsOpen;
 	}
 	
 	//insert one record into database

@@ -91,13 +91,10 @@ public class XmlAdapter {
 					try {
 						
 						int count = 0;
-//						Log.v("xmlimport", "WWWWW");
 						while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
 							String itemname = xmlPullParser.getName();
 							
 							if ( (itemname!=null) && (xmlPullParser.getEventType() == XmlPullParser.START_TAG) ) {
-//								count = xmlPullParser.getAttributeCount();
-//								Log.v("xmlimport", itemname + xmlPullParser.getEventType() );
 								if (itemname.equals("item")) {
 									String attrname = xmlPullParser.getAttributeName(0);
 									String attrvalue = xmlPullParser.getAttributeValue(0);
@@ -105,7 +102,6 @@ public class XmlAdapter {
 										Word word = new Word();
 										word.spelling = attrname;
 										word.explanation = attrvalue;
-//										Log.v("xmlimport", "IIII");
 										db.insert(word);
 										count++;
 									}
