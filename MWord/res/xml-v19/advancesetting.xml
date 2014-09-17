@@ -8,7 +8,8 @@
             android:key="immersion_key"
             android:summaryOn="@string/immersion_summary_on"
             android:summaryOff="@string/immersion_summary_off"
-            android:defaultValue="true"/>
+            android:defaultValue="true"
+            android:selectable="true"/>
         <CheckBoxPreference 
             android:title="@string/swipeback"
             android:key="swipe_back_key"

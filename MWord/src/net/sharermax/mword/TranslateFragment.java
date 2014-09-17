@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +83,8 @@ public class TranslateFragment extends Fragment {
 		to = "zh";
 		translate_src = "";
 		translate_dst = "";
+		
+		
 		//选择翻译模式
 		translateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
@@ -101,6 +104,7 @@ public class TranslateFragment extends Fragment {
 				case R.id.entozh_radiobutton:
 					from = "en";
 					to = "zh";
+					break;
 				default:
 					break;
 				}
@@ -274,7 +278,6 @@ public class TranslateFragment extends Fragment {
 				e.printStackTrace();
 			}
 		}
-
 	}
 	
 	public void setEditTextLostFocus() {
@@ -285,7 +288,11 @@ public class TranslateFragment extends Fragment {
 	}
 	
 	public void hideKeyboard() {
-		InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputMethodManager.hideSoftInputFromWindow(translatInput.getWindowToken(), inputMethodManager.HIDE_NOT_ALWAYS);
+		InputMethodManager inputMethodManager = 
+				(InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(translatInput.getWindowToken(), 
+				inputMethodManager.HIDE_NOT_ALWAYS);
+
 	}
+	
 }

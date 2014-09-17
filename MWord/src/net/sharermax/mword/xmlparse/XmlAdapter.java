@@ -103,8 +103,7 @@ public class XmlAdapter {
 									}
 								}
 
-							}
-							
+							}							
 						}
 						return count;
 					} catch (IOException e) {

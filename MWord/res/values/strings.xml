@@ -14,6 +14,9 @@
     <!-- MainActivity Action Bar Setting OptionMenu -->
     <string name="action_import">导入单词</string>
     <string name="action_export">导出单词</string>
+    <!-- Import Opention Dialog -->
+    <string name="import_title">导入单词</string>
+    <string name="import_filename">文件名:</string>
     
     <!-- Remember Setting  -->
     <string name="remember_setting">助手设置</string>
@@ -65,12 +68,14 @@
     <string name="no_word_message">未找到单词:(</string>
     <!-- Adcance Setting -->
     <string name="app_advance_setteing">高级设置</string>
+    <string name="app_advance_setting_summary">高级设置(重启生效)</string>
     <string name="swipeback">滑动返回</string>
     <string name="swipeback_summary_on">滑动返回开启</string>
     <string name="swipeback_summary_off">滑动返回关闭</string>
     <string name="immersion">沉浸式</string>
     <string name="immersion_summary_on">沉浸式开启（Android4.4 以上有效）</string>
     <string name="immersion_summary_off">沉浸式关闭</string>
+    
     <!-- About  -->
     <string name="app_about">关于</string>
     <string name="app_about_summary">应用信息</string>

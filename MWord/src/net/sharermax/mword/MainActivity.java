@@ -150,10 +150,10 @@ public class MainActivity extends Activity {
 			mIsRememberFragment = !mIsRememberFragment;
 			return true;
 		case R.id.action_import:
-			importBack();
+			importBackup();
 			return true;
 		case R.id.action_export:
-			exportBack();
+			exportBackup();
 			return true;
 		case android.R.id.home:
 			mSlidingMenu.toggle();
@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void exportBack() {
+	private void exportBackup() {
 		if (mDBAdapter == null || mDBAdapter.isClose()) {
 			mDBAdapter = new DBAdapter(MainActivity.this);
 			mDBAdapter.open();
@@ -189,13 +189,16 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private void importBack() {
+	private void importBackup() {
 		Intent fileselectintent = new Intent(Intent.ACTION_GET_CONTENT);
 		fileselectintent.setType("*/*");
 		fileselectintent.addCategory(Intent.CATEGORY_OPENABLE);
 		//onActivityResult(...) method inside parent activity
 		startActivityForResult(fileselectintent,2);
 	}
+	
+	
+	
 	//2s内两次点击返回键退出程序
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

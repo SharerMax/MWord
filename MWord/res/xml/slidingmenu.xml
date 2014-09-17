@@ -29,7 +29,7 @@
         <Preference 
             android:title="@string/app_advance_setteing"
             android:key="advence_setting_key"
-            android:summary="@string/app_advance_setteing"/>
+            android:summary="@string/app_advance_setting_summary"/>
         	
         <Preference
             android:title="@string/app_about"
