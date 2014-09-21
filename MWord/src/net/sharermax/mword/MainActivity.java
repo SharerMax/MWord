@@ -321,4 +321,9 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
+	
+	public boolean checkUpdate() {
+		
+		return false;
+	}
 }

@@ -219,7 +219,8 @@ public class TranslateFragment extends Fragment {
 				if (httpURLConnection.getResponseCode()== HttpStatus.SC_OK) {
 					InputStream resultInputStream = httpURLConnection.getInputStream();
 					
-					BufferedReader resultBufferedReader = new BufferedReader(new InputStreamReader(resultInputStream));
+					BufferedReader resultBufferedReader = new BufferedReader(
+							new InputStreamReader(resultInputStream));
 					String strResult = "";
 					String lineString = null;
 					while ((lineString = resultBufferedReader.readLine()) != null) {
@@ -231,13 +232,15 @@ public class TranslateFragment extends Fragment {
 					httpURLConnection.disconnect();
 					return strResult;
 				} else {
-					Toast.makeText(getActivity(), "响应错误(─.─|||", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), 
+							"响应错误(─.─|||", Toast.LENGTH_SHORT).show();
 					return null;
 				}
 				
 			} catch (java.net.SocketTimeoutException e) {
 				// TODO: handle exception
-				Toast.makeText(getActivity(), "网络貌似不给力(─.─|||", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), 
+						"网络貌似不给力(─.─|||", Toast.LENGTH_SHORT).show();
 				Log.v("network", "connectException");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
