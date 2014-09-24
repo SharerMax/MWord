@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory 
-        android:title="@string/app_advance_setteing"
-        android:key="advance_setting">
+        android:title="@string/app_view_setting"
+        android:key="view_setting">
         <CheckBoxPreference 
             android:title="@string/immersion"
             android:key="immersion_key"
@@ -15,6 +15,16 @@
             android:key="swipe_back_key"
             android:summaryOn="@string/swipeback_summary_on"
             android:summaryOff="@string/swipeback_summary_off"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/notification_setting"
+        android:key="notification_key">
+        <CheckBoxPreference
+            android:title="@string/update_notification"
+            android:key="update_notification_key"
+            android:summaryOn="@string/update_notificateon_on"
+            android:summaryOff="@string/update_notification_off"
             android:defaultValue="true"/>
     </PreferenceCategory>
 

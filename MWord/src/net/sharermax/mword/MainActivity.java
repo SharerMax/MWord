@@ -1,12 +1,17 @@
 package net.sharermax.mword;
 
 import net.sharermax.mword.database.DBAdapter;
+import net.sharermax.mword.network.UpdateApp;
+import net.sharermax.mword.network.UpdateApp.TaskOverListener;
 import net.sharermax.mword.xmlparse.XmlAdapter;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,11 +45,53 @@ public class MainActivity extends Activity {
 	private String mExpotrpath;
 	private SlidingMenu mSlidingMenu;
 	private boolean mImmersionEnable;
+	private boolean mUpdateNotiEnable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		mUpdateNotiEnable = sharedPreferences.getBoolean(PreferenceKey.UPDATE_NOTIF_KEY, true);
+		
+		if (mUpdateNotiEnable) {
+			UpdateApp updateApp = new UpdateApp(this,UpdateApp.VERSION_TYPE_BETA);
+			updateApp.setTaskOverListener(new TaskOverListener() {
+				
+				@Override
+				public void taskOver(int versionCode) {
+					// TODO Auto-generated method stub
+					PackageManager packageManager = MainActivity.this.getPackageManager();
+					try {
+						PackageInfo packageInfo = packageManager.getPackageInfo(
+								MainActivity.this.getPackageName(), 0);
+						if (versionCode > packageInfo.versionCode) {
+							Toast.makeText(getApplicationContext(), "有更新", Toast.LENGTH_LONG).show();
+							UpdateApp.updateNotification(getApplicationContext());
+						}
+					} catch (NameNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		if (android.os.Build.VERSION.SDK_INT > 18 &&
+				sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true)) {
+			mImmersionEnable = true;
+			Window window = getWindow();
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setNavigationBarTintEnabled(true);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setTintColor(Color.parseColor("#ff009688"));
+		} else {
+			mImmersionEnable = false;
+		}
 		mRememberFragment = new RememberFragment();
 		mTranslateFragment = new TranslateFragment();
 		
@@ -69,24 +116,6 @@ public class MainActivity extends Activity {
 				R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		SharedPreferences sharedPreferences = 
-				PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		
-		if (android.os.Build.VERSION.SDK_INT > 18 &&
-				sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true)) {
-			mImmersionEnable = true;
-			Window window = getWindow();
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);
-			tintManager.setNavigationBarTintEnabled(true);
-			tintManager.setStatusBarTintEnabled(true);
-			tintManager.setTintColor(Color.parseColor("#ff009688"));
-		} else {
-			mImmersionEnable = false;
-		}
 		
 	}
 	

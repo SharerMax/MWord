@@ -3,8 +3,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.imid.swipebacklayout.SwipeBackLayout;
+import me.imid.swipebacklayout.app.SwipeBackActivity;
 import net.sharermax.mword.network.UpdateApp;
 import net.sharermax.mword.network.UpdateApp.TaskOverListener;
+import android.R.bool;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -35,10 +38,12 @@ import android.widget.Toast;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.readystatesoftware.systembartint.SystemBarTintManager.SystemBarConfig;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends SwipeBackActivity {
 
-	private ListView listView;
+	private ListView mlistView;
 	private boolean mImmersionEnable;
+	private boolean mSwipeBackEnable;
+	private SwipeBackLayout mSwipeBackLayout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -46,38 +51,39 @@ public class AboutActivity extends Activity {
 		setContentView(R.layout.about);
 		SharedPreferences sharedPreferences = 
 				PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		if (android.os.Build.VERSION.SDK_INT > 18 &&
-				sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true)) {
-			mImmersionEnable = true;
+		//滑动返回
+		mSwipeBackEnable = sharedPreferences.getBoolean(PreferenceKey.SWIPE_BACK_KEY, true);
+		mSwipeBackLayout = getSwipeBackLayout();
+		if (mSwipeBackEnable) {
+//					Log.v("BASIC", "YYY");
+			mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+		} else {
+			setSwipeBackEnable(false);
+		}
+		
+		mImmersionEnable = sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true);
+		if (mImmersionEnable && 
+				android.os.Build.VERSION.SDK_INT > 18 ) {
 			Window window = getWindow();
 			window.setFlags(
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, 
 					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 			window.setFlags(
 					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 
 					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);
-			tintManager.setNavigationBarTintEnabled(true);
-			tintManager.setStatusBarTintEnabled(true);
-			tintManager.setTintColor(Color.parseColor("#ff009688"));
-			SystemBarConfig systemBarConfig = tintManager.getConfig();
-			findViewById(R.id.about_listview).setPadding(
-					0, systemBarConfig.getPixelInsetTop(getActionBar().isShowing()), 
-					0, systemBarConfig.getPixelInsetBottom());
-		} else {
-			mImmersionEnable = false;
+			
 		}
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		listView = (ListView)findViewById(R.id.about_listview);
+		mlistView = (ListView)findViewById(R.id.about_listview);
 //		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getData());
 //		listView.setAdapter(adapter);
 //		listView.setText
 		SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.about_item, 
 				new String[]{"text1", "text2"}, 
 				new int[]{R.id.text1, R.id.text2});
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener() {
+		mlistView.setAdapter(adapter);
+		mlistView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -126,7 +132,7 @@ public class AboutActivity extends Activity {
 								if (versionCode > packageInfo.versionCode) {
 									
 									Toast.makeText(getApplicationContext(), "有更新", Toast.LENGTH_LONG).show();
-									updateNotification();
+									UpdateApp.updateNotification(AboutActivity.this);
 								} else {
 									Toast.makeText(getApplicationContext(), "已是最新版", Toast.LENGTH_LONG).show();
 								}
@@ -145,7 +151,35 @@ public class AboutActivity extends Activity {
 			}
 		});
 	}
+
 	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		if ( mImmersionEnable &&
+				android.os.Build.VERSION.SDK_INT > 18) {
+			Window window = getWindow();
+			window.setFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setFlags(
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 
+					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+			tintManager.setNavigationBarTintEnabled(true);
+			tintManager.setStatusBarTintEnabled(true);
+			tintManager.setTintColor(Color.parseColor("#ff009688"));
+			SystemBarConfig systemBarConfig = tintManager.getConfig();
+			findViewById(R.id.about_listview).setPadding(
+					0, systemBarConfig.getPixelInsetTop(getActionBar().isShowing()), 
+					0, systemBarConfig.getPixelInsetBottom());
+		} else {
+			mImmersionEnable = false;
+		}
+	}
+
+
 	private List<HashMap<String, String>> getData() {
 		List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 //		data.add("开发者");
@@ -196,26 +230,5 @@ public class AboutActivity extends Activity {
 		map5.put("text2", "点击检查更新");
 		data.add(map5);
 		return data;
-	}
-	
-	private void updateNotification() {
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-		builder.setLargeIcon(bitmap);
-		builder.setContentText("MWord有更新~~");
-		builder.setContentTitle("MWord");
-		builder.setSmallIcon(R.drawable.ic_launcher);
-		builder.setTicker("MWord有更新~~");
-		builder.setAutoCancel(true);
-		Intent intent = new Intent();
-		intent.setAction(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(UpdateApp.APP_BETA_DOWNLOAD));
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		builder.setContentIntent(pendingIntent);
-		NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//		Notification notification = builder.build();
-//		notification.
-		nManager.notify(0, builder.build());
-		
 	}
 }

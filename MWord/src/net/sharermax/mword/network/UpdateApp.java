@@ -8,16 +8,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.sharermax.mword.R;
+
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.R.string;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class UpdateApp {
@@ -37,6 +46,7 @@ public class UpdateApp {
 	private Context mContext;
 	private int mVersionType;
 	private TaskOverListener mTaskOverListener;
+	
 	public UpdateApp(Context context, int versionType) {
 		// TODO Auto-generated constructor stub
 		mContext = context;
@@ -136,5 +146,25 @@ public class UpdateApp {
 	
 	public static interface TaskOverListener{
 		public abstract void taskOver(int versionCode);
+	}
+	
+	public static void  updateNotification(Context mContext) {
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher);
+		builder.setLargeIcon(bitmap);
+		builder.setContentText("MWord有更新~~");
+		builder.setContentTitle("MWord");
+		builder.setSmallIcon(R.drawable.ic_launcher);
+		builder.setTicker("MWord有更新~~");
+		builder.setAutoCancel(true);
+		Intent intent = new Intent();
+		intent.setAction(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(UpdateApp.APP_BETA_DOWNLOAD));
+		PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.setContentIntent(pendingIntent);
+		NotificationManager nManager = (NotificationManager) mContext.getSystemService(mContext.NOTIFICATION_SERVICE);
+//		Notification notification = builder.build();
+//		notification.
+		nManager.notify(0, builder.build());
 	}
 }

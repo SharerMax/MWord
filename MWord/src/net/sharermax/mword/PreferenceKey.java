@@ -16,6 +16,7 @@ public class PreferenceKey {
 	public final static String ADVANCE_SETTING_KEY = "advence_setting_key";
 	public final static String IMMERSION_KEY = "immersion_key";
 	public final static String SWIPE_BACK_KEY = "swipe_back_key";
+	public final static String UPDATE_NOTIF_KEY = "update_notification_key";
 	
 	public final static String TRANSLATE_API_KEY = "translate_api_key";
 	
