@@ -1,7 +1,11 @@
-apply plugin: 'android-library'
+apply plugin: 'android'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
+    compile project(':SlidingMenu')
+    compile project(':actionbarsherlock')
+    compile project(':SystemBarTint')
+    compile project(':SwipeBackLayout')
 }
 
 android {

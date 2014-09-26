@@ -1,0 +1,5 @@
+include ':SystemBarTint'
+include ':SwipeBackLayout'
+include ':MWord'
+include ':SlidingMenu'
+include ':actionbarsherlock'
