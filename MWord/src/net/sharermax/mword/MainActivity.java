@@ -56,41 +56,11 @@ public class MainActivity extends Activity {
 		mUpdateNotiEnable = sharedPreferences.getBoolean(PreferenceKey.UPDATE_NOTIF_KEY, true);
 		
 		if (mUpdateNotiEnable) {
-			UpdateApp updateApp = new UpdateApp(this,UpdateApp.VERSION_TYPE_BETA);
-			updateApp.setTaskOverListener(new TaskOverListener() {
-				
-				@Override
-				public void taskOver(int versionCode) {
-					// TODO Auto-generated method stub
-					PackageManager packageManager = MainActivity.this.getPackageManager();
-					try {
-						PackageInfo packageInfo = packageManager.getPackageInfo(
-								MainActivity.this.getPackageName(), 0);
-						if (versionCode > packageInfo.versionCode) {
-							Toast.makeText(getApplicationContext(), "有更新", Toast.LENGTH_LONG).show();
-							UpdateApp.updateNotification(getApplicationContext());
-						}
-					} catch (NameNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
+            checkUpdate();
 		}
-		if (android.os.Build.VERSION.SDK_INT > 18 &&
-				sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true)) {
-			mImmersionEnable = true;
-			Window window = getWindow();
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-			window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-					WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);
-			tintManager.setNavigationBarTintEnabled(true);
-			tintManager.setStatusBarTintEnabled(true);
-			tintManager.setTintColor(Color.parseColor("#ff009688"));
-		} else {
-			mImmersionEnable = false;
+        mImmersionEnable = sharedPreferences.getBoolean(PreferenceKey.IMMERSION_KEY, true);
+		if (mImmersionEnable && android.os.Build.VERSION.SDK_INT > 18) {
+            immersionThemeConfig();
 		}
 		mRememberFragment = new RememberFragment();
 		mTranslateFragment = new TranslateFragment();
@@ -100,26 +70,25 @@ public class MainActivity extends Activity {
 		mFragmentManager.beginTransaction().replace(R.id.content, mRememberFragment).commit();
 		mIsRememberFragment = true;
 
-		mSlidingMenu = new SlidingMenu(this);
-		mSlidingMenu.setMode(SlidingMenu.LEFT);
-		mSlidingMenu.setFadeDegree(0.35f);
-		mSlidingMenu.setShadowDrawable(R.drawable.shadow);
-		mSlidingMenu.setShadowWidth(15);
-		mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-		mSlidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-
-		mSlidingMenu.setMenu(R.layout.menu);
-		mSlidingMenu.setOnClosedListener(new MenuClosedListener());
-		mSlidingMenu.setOnOpenListener(new MenuOpenListener());
-		getFragmentManager().beginTransaction().replace(
-				R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
+		loadSlidingMenu();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 	}
-	
-	public TranslateFragment getTranslateFragment() {
+    //Immersion Theme config
+    private void immersionThemeConfig() {
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(Color.parseColor("#ff009688"));
+    }
+
+    public TranslateFragment getTranslateFragment() {
 		return mTranslateFragment;
 	}
 	public RememberFragment getRememberFragment() {
@@ -131,7 +100,24 @@ public class MainActivity extends Activity {
 	public SlidingMenu getSlidingMenu() {
 		return mSlidingMenu;
 	}
-	
+    //加载侧边栏布局
+	private void loadSlidingMenu() {
+        mSlidingMenu = new SlidingMenu(this);
+        mSlidingMenu.setMode(SlidingMenu.LEFT);
+        mSlidingMenu.setFadeDegree(0.35f);
+        mSlidingMenu.setShadowDrawable(R.drawable.shadow);
+        mSlidingMenu.setShadowWidth(15);
+        mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        mSlidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+
+        mSlidingMenu.setMenu(R.layout.menu);
+        mSlidingMenu.setOnClosedListener(new MenuClosedListener());
+        mSlidingMenu.setOnOpenListener(new MenuOpenListener());
+        getFragmentManager().beginTransaction().replace(
+                R.id.slidingmenu, new SlidingFragment(), "SettingFragment").commit();
+    }
+
 	private boolean hideSlidingMenu() {
 		// TODO Auto-generated method stub
 		if (mSlidingMenu != null && mSlidingMenu.isMenuShowing()) {
@@ -141,7 +127,32 @@ public class MainActivity extends Activity {
 		return false;
 
 	}
-	
+
+    //检查更新
+    private void checkUpdate() {
+        UpdateApp updateApp = new UpdateApp(this,UpdateApp.VERSION_TYPE_BETA);
+        updateApp.setTaskOverListener(new TaskOverListener() {
+
+            @Override
+            public void taskOver(int versionCode) {
+                // TODO Auto-generated method stub
+                PackageManager packageManager = MainActivity.this.getPackageManager();
+                try {
+                    PackageInfo packageInfo = packageManager.getPackageInfo(
+                            MainActivity.this.getPackageName(), 0);
+                    if (versionCode > packageInfo.versionCode) {
+                        Toast.makeText(getApplicationContext(), "有更新", Toast.LENGTH_LONG).show();
+                        UpdateApp.updateNotification(getApplicationContext());
+                    }
+                } catch (NameNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -350,10 +361,5 @@ public class MainActivity extends Activity {
 				mTranslateFragment.hideKeyboard();
 			}
 		}
-	}
-	
-	public boolean checkUpdate() {
-		
-		return false;
 	}
 }

@@ -8,7 +8,7 @@
             android:key="immersion_key"
             android:summaryOn="@string/immersion_summary_on"
             android:summaryOff="@string/immersion_summary_off"
-            android:defaultValue="flase"
+            android:defaultValue="false"
             android:selectable="false"/>
         <CheckBoxPreference 
             android:title="@string/swipeback"
@@ -23,7 +23,7 @@
         <CheckBoxPreference
             android:title="@string/update_notification"
             android:key="update_notification_key"
-            android:summaryOn="@string/update_notificateon_on"
+            android:summaryOn="@string/update_notification_on"
             android:summaryOff="@string/update_notification_off"
             android:defaultValue="true"/>
     </PreferenceCategory>

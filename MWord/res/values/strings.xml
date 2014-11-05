@@ -78,7 +78,7 @@
     <string name="immersion_summary_off">沉浸式关闭</string>
     <string name="notification_setting">通知设置</string>
     <string name="update_notification">更新通知</string>
-    <string name="update_notificateon_on">开启通知提醒</string>
+    <string name="update_notification_on">开启通知提醒</string>
     <string name="update_notification_off">关闭通知提醒</string>
     <!-- About  -->
     <string name="app_about">关于</string>

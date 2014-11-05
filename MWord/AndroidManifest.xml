@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/MyMainTheme">
         <activity
-            android:name="net.sharermax.mword.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
@@ -28,15 +28,15 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name="net.sharermax.mword.AboutActivity"
+            android:name=".AboutActivity"
             android:label="@string/app_about"
             android:theme="@style/MySecondTheme"
-            android:parentActivityName="net.sharermax.mword.MainActivity">
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity 
-            android:name="net.sharermax.mword.BasicSettingActivity"
+            android:name=".BasicSettingActivity"
             android:theme="@style/MySecondTheme"
-            android:parentActivityName="net.sharermax.mword.MainActivity">
+            android:parentActivityName=".MainActivity">
             
         </activity>
     </application>
