@@ -12,8 +12,8 @@ This App only for learnning Android, maybe it is not useful for you.
 ![alt text](http://picturespace-max.qiniudn.com/MWord.png?imageView2/2/w/500/q/85 "MWord")
 
 ##About Me
-- [Blog](http://sharermax.net) <br />
-- [Weibo](http://weibo.com/hksharemax) <br />
-- [Twitter](https://twitter.com/sharermax) <br />
-- [E-Mail](mailto:mdcw1103#gmail.com) (**Please use the symbol '@' instead of my email symbol '#'**)<br />
+- [Blog](http://sharermax.net)
+- [Weibo](http://weibo.com/hksharemax)
+- [Twitter](https://twitter.com/sharermax)
+- [E-Mail](mailto:mdcw1103#gmail.com) (**Please use the symbol '@' instead of my email symbol '#'**)
 
